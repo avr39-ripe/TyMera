@@ -3,7 +3,7 @@
 #include <configuration.h>
 #include <SmingCore/SmingCore.h>
 #include <Libraries/OneWire/OneWire.h>
-#include <tempsensor.h>
+#include <tempsensors.h>
 #include <switch.h>
 #include <thermo.h>
 #include <heatcontrol.h>
@@ -17,7 +17,7 @@ const uint8_t maxThermostats = 4;
 const uint16_t thermostatsJsonBufSize = JSON_OBJECT_SIZE(10); // Termostats List Json Buffer size
 const uint16_t thermostatsFileBufSize = 256;
 
-extern TempSensorHttp *tempSensor;
+extern TempSensorsHttp *tempSensors;
 extern Thermostat *thermostat[maxThermostats];
 
 extern unsigned long counter; // Kind of heartbeat counter

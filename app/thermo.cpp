@@ -7,9 +7,10 @@
 
 #include <octotherm.h>
 
-Thermostat::Thermostat( TempSensor &tempSensor, String name, uint16_t refresh)
+Thermostat::Thermostat( TempSensors &tempSensors, uint8_t sensorId, String name, uint16_t refresh)
 {
-	_tempSensor = &tempSensor;
+	_tempSensors = &tempSensors;
+	_sensorId = sensorId;
 	_name = name;
 	_refresh = refresh;
 	_state = false;
@@ -19,22 +20,22 @@ Thermostat::Thermostat( TempSensor &tempSensor, String name, uint16_t refresh)
 
 void Thermostat::check()
 {
-	float currTemp = _tempSensor->getTemp();
+	float currTemp = _tempSensors->getTemp(_sensorId);
 	float targetTemp = 0;
 	uint8_t currentProg = 0;
 	bool prevState = _state;
 
-	if (_tempSensor->isHealthy())
+	if (_tempSensors->isValid(_sensorId))
 	{
-		_tempSensorHealthy = maxUnhealthyGetTemp;
+		_tempSensorValid = maxInvalidGetTemp;
 	}
-	else if (_tempSensorHealthy > 0)
+	else if (_tempSensorValid > 0)
 	{
-		_tempSensorHealthy--;
-		Serial.printf("Name: %s - TEMPSENSOR ERROR!, %d\n", _name.c_str(), _tempSensorHealthy);
+		_tempSensorValid--;
+		Serial.printf("Name: %s - TEMPSENSOR ERROR!, %d\n", _name.c_str(), _tempSensorValid);
 	}
 
-	if (!_tempSensorHealthy)
+	if (!_tempSensorValid)
 	{
 		_state = true; // If we lost remote tempsensor we switch termostat on instantly
 		Serial.printf("Name: %s - TEMPSENSOR ERROR! - WE LOST IT!\n", _name.c_str());
@@ -201,7 +202,7 @@ void Thermostat::onStateCfg(HttpRequest &request, HttpResponse &response)
 		json["name"] = _name;
 		json["active"] = _active;
 		json["state"] = _state;
-		json["temperature"] = _tempSensor->getTemp();
+		json["temperature"] = _tempSensors->getTemp(_sensorId);
 		json["manual"] = _manual;
 		json["manualTargetTemp"] = _manualTargetTemp;
 		json["targetTempDelta"] = _targetTempDelta;

@@ -4,7 +4,7 @@
 Timer counterTimer;
 void counter_loop();
 unsigned long counter = 0;
-TempSensorHttp *tempSensor;
+TempSensorsHttp *tempSensors;
 Thermostat *thermostat[maxThermostats];
 SwitchHttp officeSwitch("http://192.168.31.204/set_state");
 
@@ -76,12 +76,15 @@ void init()
 
 	ActiveConfig = loadConfig();
 
-	tempSensor = new TempSensorHttp(ActiveConfig.sensorUrl);
-	thermostat[0] = new Thermostat(*tempSensor,"Office", 4000);
+	tempSensors = new TempSensorsHttp(4000);
+	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=0");
+	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=1");
+	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=2");
+	thermostat[0] = new Thermostat(*tempSensors,0,"Office", 4000);
 	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, &officeSwitch));
-	thermostat[1] = new Thermostat(*tempSensor,"Kitchen", 4000);
-	thermostat[2] = new Thermostat(*tempSensor,"Hall", 4000);
-	thermostat[3] = new Thermostat(*tempSensor,"Bedroom", 4000);
+	thermostat[1] = new Thermostat(*tempSensors,1,"Kitchen", 4000);
+	thermostat[2] = new Thermostat(*tempSensors,2,"Hall", 4000);
+	thermostat[3] = new Thermostat(*tempSensors,0,"Bedroom", 4000);
 
 	for(uint8_t i = 0; i< 7; i++)
 	{
@@ -181,7 +184,7 @@ void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway)
 	}
 
 	ntpClient.requestTime();
-	tempSensor->start();
+	tempSensors->start();
 	for (auto _thermostat: thermostat)
 		_thermostat->start();
 	officeSwitch.start();

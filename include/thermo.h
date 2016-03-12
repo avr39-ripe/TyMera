@@ -12,7 +12,7 @@
 
 typedef Delegate<void(uint8_t state)> onStateChangeDelegate;
 
-const uint8_t maxUnhealthyGetTemp = 10; // max unhealthy getTemp before we assume tempsensor lost
+const uint8_t maxInvalidGetTemp = 10; // max unhealthy getTemp before we assume tempsensor lost
 const uint8_t maxProg = 6;
 const uint8_t antiFrozen = 5; // temperature to maintain when thermostat is not _active to prevent system freeze
 
@@ -35,7 +35,7 @@ struct SchedUnit
 class Thermostat
 {
 public:
-	Thermostat(TempSensor &tempSensor, String name = "Thermostat", uint16_t refresh = 4000);
+	Thermostat(TempSensors &tempSensors, uint8_t sensorId, String name = "Thermostat", uint16_t refresh = 4000);
 	void start();
 	void stop();
 	void check();
@@ -63,11 +63,12 @@ private:
 	uint16_t _targetTempDelta = 50; //delta +- for both _targetTemp and manualTargetTemp MULTIPLE BY 100
 	uint16_t _refresh; // thermostat update interval
 	Timer _refreshTimer; // timer for thermostat update
-	TempSensor *_tempSensor;
+	TempSensors *_tempSensors;
+	uint8_t	_sensorId;
 	uint8_t _prevManual = false; // previous state of _manual
 	uint8_t _manualProg = 0; // program that was when manual mode turned on, when program change, manual mode will turn off
 	onStateChangeDelegate onChangeState = nullptr;
-	uint8_t _tempSensorHealthy = maxUnhealthyGetTemp; // if more than zero we STILL trust tempSensor temperature if less zero NOT trust
+	uint8_t _tempSensorValid = maxInvalidGetTemp; // if more than zero we STILL trust tempSensor temperature if less zero NOT trust
 };
 
 
