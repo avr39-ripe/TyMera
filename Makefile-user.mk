@@ -26,6 +26,6 @@
 # Com port speed
 # COM_SPEED	= 115200
 
-SPIFF_SIZE = 196608
+SPIFF_SIZE = 128000
 MODULES = app lib/tempsensor lib/switch
 EXTRA_INCLUDES = lib/tempsensor lib/switch
