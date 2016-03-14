@@ -4,6 +4,8 @@
 Timer counterTimer;
 void counter_loop();
 unsigned long counter = 0;
+OneWire ds(onewire_pin);
+TempSensorsOW *localTempSensors;
 TempSensorsHttp *tempSensors;
 Thermostat *thermostat[maxThermostats];
 SwitchHttp officeSwitch("http://192.168.31.204/set_state");
@@ -75,16 +77,23 @@ void init()
 	initialWifiConfig(); //One-time WIFI setup
 
 	ActiveConfig = loadConfig();
+	ds.begin();
+
+	localTempSensors = new TempSensorsOW(ds, 4000);
+	localTempSensors->addSensor((String)"289D143E000000DB");
+	localTempSensors->addSensor((String)"28E31D3E000000A3");
+	localTempSensors->addSensor((String)"2897DD3D0000004D");
+	localTempSensors->start();
 
 	tempSensors = new TempSensorsHttp(4000);
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=0");
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=1");
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=2");
 	tempSensors->addSensor("http://192.168.31.130/temperature.json?sensor=0");
-	thermostat[0] = new Thermostat(*tempSensors,0,"Office", 4000);
+	thermostat[0] = new Thermostat(*localTempSensors,0,"Office", 4000);
 	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, &officeSwitch));
-	thermostat[1] = new Thermostat(*tempSensors,1,"Kitchen", 4000);
-	thermostat[2] = new Thermostat(*tempSensors,2,"Hall", 4000);
+	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);
+	thermostat[2] = new Thermostat(*localTempSensors,2,"Hall", 4000);
 	thermostat[3] = new Thermostat(*tempSensors,3,"Bedroom", 4000);
 
 	for(uint8_t i = 0; i< 7; i++)

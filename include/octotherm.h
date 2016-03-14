@@ -10,8 +10,9 @@
 #include <thermostat.h>
 
 //OneWire stuff
-const uint8_t onewire_pin = 2;
+const uint8_t onewire_pin = 4;
 extern OneWire ds;
+extern TempSensorsOW *localTempSensors;
 
 const uint8_t maxThermostats = 4;
 const uint16_t thermostatsJsonBufSize = JSON_OBJECT_SIZE(10); // Termostats List Json Buffer size
