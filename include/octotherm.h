@@ -8,9 +8,10 @@
 #include <thermo.h>
 #include <heatcontrol.h>
 #include <thermostat.h>
+#include <twvalve.h>
 
 //OneWire stuff
-const uint8_t onewire_pin = 4;
+const uint8_t onewire_pin = 2;
 extern OneWire ds;
 extern TempSensorsOW *localTempSensors;
 
