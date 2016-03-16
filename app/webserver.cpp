@@ -54,11 +54,29 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 					WifiAccessPoint.enable(true, true);
 				}
 			}
-			if (root["sensorUrl"].success())
+			if (root["mode_switch_temp"].success()) // Settings
 			{
-				ActiveConfig.sensorUrl = String((const char *)root["sensorUrl"]);
-				system_restart();
+				ActiveConfig.mode_switch_temp = root["mode_switch_temp"];
+				ActiveConfig.mode_switch_temp_delta = root["mode_switch_temp_delta"];
+				ActiveConfig.pump_on_delay = root["pump_on_delay"];
+				ActiveConfig.pump_off_delay = root["pump_off_delay"];
+				ActiveConfig.caldron_on_delay = root["caldron_on_delay"];
+				ActiveConfig.room_off_delay = root["room_off_delay"];
+				ActiveConfig.twvalve_temp = root["twvalve_temp"];
+				ActiveConfig.twvalve_temp_delta = root["twvalve_temp_delta"];
+				ActiveConfig.twvalve_step_time = root["twvalve_step_time"];
+				ActiveConfig.twvalve_edge_time = root["twvalve_edge_time"];
+
+				tWValve->setTargetTemp(ActiveConfig.twvalve_temp);
+				tWValve->setTargetTempDelta(ActiveConfig.twvalve_temp_delta);
+				tWValve->setStepTime(ActiveConfig.twvalve_step_time);
+				tWValve->setEdgeTime(ActiveConfig.twvalve_edge_time);
 			}
+//			if (root["sensorUrl"].success())
+//			{
+//				ActiveConfig.sensorUrl = String((const char *)root["sensorUrl"]);
+//				system_restart();
+//			}
 		}
 		saveConfig(ActiveConfig);
 	}
@@ -77,7 +95,22 @@ void onConfiguration_json(HttpRequest &request, HttpResponse &response)
 	json["StaSSID"] = ActiveConfig.StaSSID;
 	json["StaPassword"] = ActiveConfig.StaPassword;
 	json["StaEnable"] = ActiveConfig.StaEnable;
-	json["sensorUrl"] = ActiveConfig.sensorUrl;
+//	json["sensorUrl"] = ActiveConfig.sensorUrl;
+
+	json["mode_switch_temp"] = ActiveConfig.mode_switch_temp;
+	json["mode_switch_temp_delta"] = ActiveConfig.mode_switch_temp_delta;
+	json["pump_on_delay"] = ActiveConfig.pump_on_delay;
+	json["pump_off_delay"] = ActiveConfig.pump_off_delay;
+	json["caldron_on_delay"] = ActiveConfig.caldron_on_delay;
+	json["room_off_delay"] = ActiveConfig.room_off_delay;
+//	json["start_minutes"] = ActiveConfig.start_minutes;
+//	json["stop_minutes"] = ActiveConfig.stop_minutes;
+//	json["cycle_duration"] = ActiveConfig.cycle_duration;
+//	json["cycle_interval"] = ActiveConfig.cycle_interval;
+	json["twvalve_temp"] = ActiveConfig.twvalve_temp;
+	json["twvalve_temp_delta"] = ActiveConfig.twvalve_temp_delta;
+	json["twvalve_step_time"] = ActiveConfig.twvalve_step_time;
+	json["twvalve_edge_time"] = ActiveConfig.twvalve_edge_time;
 
 	response.sendJsonObject(stream);
 }
@@ -106,9 +139,13 @@ void onAJAXGetState(HttpRequest &request, HttpResponse &response)
 	JsonObject& json = stream->getRoot();
 
 	json["counter"] = counter;
-	json["temperature"] = localTempSensors->getTemp(1); //show _mode_curr_temp here
-	json["healthy"] = localTempSensors->isValid(1);
+	json["tank_temp"] = localTempSensors->getTemp(1); //show _mode_curr_temp here
+	json["tank_healthy"] = localTempSensors->isValid(1);
+	json["valve_temp"] = localTempSensors->getTemp(2); //show valve temp here
+	json["valve_healthy"] = localTempSensors->isValid(2);
 	json["mode"] = HSystem._mode;
+	String date_time_str = SystemClock.getSystemTimeString();
+	json["date_time"] = date_time_str;
 
 	response.sendJsonObject(stream);
 }

@@ -4,7 +4,7 @@ ThermConfig ActiveConfig;
 
 ThermConfig loadConfig()
 {
-	StaticJsonBuffer<ConfigJsonBufferSize> jsonBuffer;
+	DynamicJsonBuffer jsonBuffer;
 	ThermConfig cfg;
 	if (fileExist(THERM_CONFIG_FILE))
 	{
@@ -32,6 +32,10 @@ ThermConfig loadConfig()
 		cfg.cycle_duration = settings["cycle_duration"];
 		cfg.cycle_interval = settings["cycle_interval"];
 		cfg.time_zone = settings["time_zone"];
+		cfg.twvalve_temp = settings["twvalve_temp"];
+		cfg.twvalve_temp = settings["twvalve_temp_delta"];
+		cfg.twvalve_step_time = settings["twvalve_step_time"];
+		cfg.twvalve_edge_time = settings["twvalve_edge_time"];
 		delete[] jsonString;
 	}
 	else
@@ -69,9 +73,13 @@ void saveConfig(ThermConfig& cfg)
 	settings["cycle_duration"] = cfg.cycle_duration;
 	settings["cycle_interval"] = cfg.cycle_interval;
 	settings["time_zone"] = cfg.time_zone;
+	settings["twvalve_temp"] = cfg.twvalve_temp;
+	settings["twvalve_temp_delta"] = cfg.twvalve_temp_delta;
+	settings["twvalve_step_time"] = cfg.twvalve_step_time;
+	settings["twvalve_edge_time"] = cfg.twvalve_edge_time;
 
-	char buf[ConfigFileBufferSize];
-	root.prettyPrintTo(buf, sizeof(buf));
+	String buf;
+	root.prettyPrintTo(buf);
 	fileSetContent(THERM_CONFIG_FILE, buf);
 }
 

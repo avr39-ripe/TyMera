@@ -26,6 +26,10 @@ struct ThermConfig
 		cycle_duration = 5; // Duration of pump stay turning on in minutes
 		cycle_interval = 60; // Interval of turning HWPump On for a while in minutes
 		time_zone = 2; // Time zone offset from GMT
+		twvalve_temp = 23;
+		twvalve_temp_delta = 0.5;
+		twvalve_step_time = 10;
+		twvalve_edge_time = 130;
 	}
 
 	String StaSSID;
@@ -45,6 +49,10 @@ struct ThermConfig
 	uint8_t cycle_duration;
 	uint8_t cycle_interval;
 	uint8_t time_zone;
+	float twvalve_temp;
+	float twvalve_temp_delta;
+	uint16_t twvalve_step_time;
+	uint16_t twvalve_edge_time;
 };
 
 ThermConfig loadConfig();

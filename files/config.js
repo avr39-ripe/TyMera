@@ -29,18 +29,39 @@ function post_netcfg(event) {
     })
 }
 
+// function post_config(event) {
+	// event.preventDefault();
+	// var formData = {
+			// 'sensorUrl'			:	document.getElementById('sensorUrl').value
+			// };
+	// $.ajax({
+        // type        : 'POST',
+        // url         : '/config',
+        // contentType	: 'application/json; charset=utf-8',
+        // data        : JSON.stringify(formData),
+        // dataType	: 'json'
+    // })
+// }
+
 function post_config(event) {
 	event.preventDefault();
 	var formData = {
-			'sensorUrl'			:	document.getElementById('sensorUrl').value
+			'mode_switch_temp'			:	document.getElementById('mode_switch_temp').value,
+			'mode_switch_temp_delta'	:	document.getElementById('mode_switch_temp_delta').value,
+			'pump_on_delay'				:	document.getElementById('pump_on_delay').value,
+			'pump_off_delay'			:	document.getElementById('pump_off_delay').value,
+			'caldron_on_delay'			:	document.getElementById('caldron_on_delay').value,
+			'room_off_delay'			:	document.getElementById('room_off_delay').value,
+			'twvalve_temp'				:	document.getElementById('twvalve_temp').value,
+			'twvalve_temp_delta'		:	document.getElementById('twvalve_temp_delta').value,
+			'twvalve_step_time'			:	document.getElementById('twvalve_step_time').value,
+			'twvalve_edge_time'			:	document.getElementById('twvalve_edge_time').value
 			};
 	$.ajax({
         type        : 'POST',
         url         : '/config',
-        contentType	: 'application/json; charset=utf-8',
-        data        : JSON.stringify(formData),
-        dataType	: 'json'
-    })
+        data        : formData
+   });
 }
 
 $( document ).ready(function() {

@@ -120,9 +120,10 @@ void init()
 	}
 
 	tWValve = new TWValve(*localTempSensors,2,4,5);
-	tWValve->setTargetTemp(23);
-	tWValve->setTargetTempDelta(0.5);
-//	tWValve->start();
+	tWValve->setTargetTemp(ActiveConfig.twvalve_temp);
+	tWValve->setTargetTempDelta(ActiveConfig.twvalve_temp_delta);
+	tWValve->setStepTime(ActiveConfig.twvalve_step_time);
+	tWValve->setEdgeTime(ActiveConfig.twvalve_edge_time);
 
 	WifiEvents.onStationDisconnect(STADisconnect);
 	WifiEvents.onStationGotIP(STAGotIP);
