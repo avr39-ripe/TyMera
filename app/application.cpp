@@ -90,7 +90,7 @@ void init()
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=0");
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=1");
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=2");
-	tempSensors->addSensor("http://10.2.113.114/temperature.json?sensor=0");
+	tempSensors->addSensor("http://192.168.31.130/temperature.json?sensor=0");
 	thermostat[0] = new Thermostat(*localTempSensors,0,"Office", 4000);
 	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, &officeSwitch));
 	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);

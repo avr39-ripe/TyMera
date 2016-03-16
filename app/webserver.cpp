@@ -19,14 +19,14 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 		// Update config
 		if (request.getBody() == NULL)
 		{
-			debugf("NULL bodyBuf");
+			debugf("NULL bodyBuf!!!\n");
 			return;
 		}
 		else
 		{
 			StaticJsonBuffer<ConfigJsonBufferSize> jsonBuffer;
 			JsonObject& root = jsonBuffer.parseObject(request.getBody());
-			root.prettyPrintTo(Serial); //Uncomment it for debuging
+			root.prettyPrintTo(Serial); Serial.println(); //Uncomment it for debuging
 
 			if (root["StaSSID"].success()) // Settings
 			{
@@ -66,6 +66,7 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 				ActiveConfig.twvalve_temp_delta = root["twvalve_temp_delta"];
 				ActiveConfig.twvalve_step_time = root["twvalve_step_time"];
 				ActiveConfig.twvalve_edge_time = root["twvalve_edge_time"];
+				ActiveConfig.zone_mode = root["zone_mode"];
 
 				tWValve->setTargetTemp(ActiveConfig.twvalve_temp);
 				tWValve->setTargetTempDelta(ActiveConfig.twvalve_temp_delta);
@@ -111,6 +112,7 @@ void onConfiguration_json(HttpRequest &request, HttpResponse &response)
 	json["twvalve_temp_delta"] = ActiveConfig.twvalve_temp_delta;
 	json["twvalve_step_time"] = ActiveConfig.twvalve_step_time;
 	json["twvalve_edge_time"] = ActiveConfig.twvalve_edge_time;
+	json["zone_mode"] = ActiveConfig.zone_mode;
 
 	response.sendJsonObject(stream);
 }

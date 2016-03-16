@@ -4,6 +4,7 @@
 #include <user_config.h>
 #include <SmingCore/SmingCore.h>
 
+
 const char THERM_CONFIG_FILE[] = ".therm.conf"; // leading point for security reasons :)
 
 struct ThermConfig
@@ -30,6 +31,7 @@ struct ThermConfig
 		twvalve_temp_delta = 0.5;
 		twvalve_step_time = 10;
 		twvalve_edge_time = 130;
+		zone_mode = 4; //WARMY from termostat.h
 	}
 
 	String StaSSID;
@@ -53,6 +55,7 @@ struct ThermConfig
 	float twvalve_temp_delta;
 	uint16_t twvalve_step_time;
 	uint16_t twvalve_edge_time;
+	uint8_t zone_mode;
 };
 
 ThermConfig loadConfig();

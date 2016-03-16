@@ -36,6 +36,7 @@ ThermConfig loadConfig()
 		cfg.twvalve_temp = settings["twvalve_temp_delta"];
 		cfg.twvalve_step_time = settings["twvalve_step_time"];
 		cfg.twvalve_edge_time = settings["twvalve_edge_time"];
+		cfg.zone_mode = settings["zone_mode"];
 		delete[] jsonString;
 	}
 	else
@@ -77,6 +78,7 @@ void saveConfig(ThermConfig& cfg)
 	settings["twvalve_temp_delta"] = cfg.twvalve_temp_delta;
 	settings["twvalve_step_time"] = cfg.twvalve_step_time;
 	settings["twvalve_edge_time"] = cfg.twvalve_edge_time;
+	settings["zone_mode"] = cfg.zone_mode;
 
 	String buf;
 	root.prettyPrintTo(buf);

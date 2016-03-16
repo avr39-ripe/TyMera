@@ -109,7 +109,11 @@
 								<label for="twvalve_edge_time">Set 3-way valve edge time, sec</label>
 								<input type="number" required class="form-control" min="5" max="500" step="1" id="twvalve_edge_time" name="twvalve_edge_time" value="{twvalve_edge_time}">
 							</div>
-							<button type="submit" class="btn btn-success">Save network</button>
+							<div class="form-group">
+								<label for="zone_mode">Set zone mode to COLDY</label>
+								<input type="checkbox" id="zone_mode" name="zone_mode" class="form-control">
+					  		</div>
+							<button type="submit" class="btn btn-success">Save settings</button>
 					  		<button type="button" id="settings_cancel" class="btn btn-link">Cancel</button>
 						</form>
 					</div>

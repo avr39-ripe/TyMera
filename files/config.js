@@ -1,3 +1,4 @@
+const Modes = { GAS: 1, WOOD: 2, WARMY: 4, COLDY: 8};
 function get_config() {
 	$.getJSON('/config.json',
 			function(data) {
@@ -8,6 +9,13 @@ function get_config() {
             	}
             	else
             		document.getElementById('StaEnable').checked = false;
+            		
+            	if (data.zone_mode == Modes.COLDY) {
+            		document.getElementById('zone_mode').checked = true;
+            	}
+            	else if (data.zone_mode == Modes.WARMY) {
+            		document.getElementById('zone_mode').checked = false;	
+            	}
         		});
             });
 }
@@ -26,7 +34,7 @@ function post_netcfg(event) {
         contentType	: 'application/json; charset=utf-8',
         data        : JSON.stringify(formData),
         dataType	: 'json'
-    })
+   });
 }
 
 // function post_config(event) {
@@ -55,12 +63,17 @@ function post_config(event) {
 			'twvalve_temp'				:	document.getElementById('twvalve_temp').value,
 			'twvalve_temp_delta'		:	document.getElementById('twvalve_temp_delta').value,
 			'twvalve_step_time'			:	document.getElementById('twvalve_step_time').value,
-			'twvalve_edge_time'			:	document.getElementById('twvalve_edge_time').value
+			'twvalve_edge_time'			:	document.getElementById('twvalve_edge_time').value,
+			'zone_mode'					:	(document.getElementById('zone_mode').checked ? Modes.COLDY : Modes.WARMY)
+
 			};
 	$.ajax({
         type        : 'POST',
         url         : '/config',
-        data        : formData
+        data        : formData,
+        contentType	: 'application/json; charset=utf-8',
+        data        : JSON.stringify(formData),
+        dataType	: 'json'
    });
 }
 

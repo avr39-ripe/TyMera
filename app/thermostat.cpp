@@ -315,7 +315,8 @@ void HeatingSystem::check_mode()
 		{
 			_rooms[room_id]->turn_off();
 		}
-		_mode = WOOD;
+		_mode &= (~GAS); //unset GAS
+		_mode |= WOOD; //set WOOD
 		caldron_turn_off();
 //		for(uint8_t room_id = 0; room_id < numRooms; room_id++)
 //		{
@@ -328,12 +329,27 @@ void HeatingSystem::check_mode()
 		{
 			_rooms[room_id]->turn_off();
 		}
-		_mode = GAS;
+		_mode &= (~WOOD); //unset WOOD
+		_mode |= GAS; //set GAS
 	}
 
-	if ( _mode & GAS) //Here check WARMY | COLDY mode
+// Zone working mode or secondary mode
+	switch (ActiveConfig.zone_mode)
 	{
-		_mode = (GAS | WARMY); // HERE ALWAYS WARMY!!!
+	case WARMY:
+		_mode &= (~COLDY); //unset COLDY
+		_mode |= WARMY; //set WARMY
+		break;
+	case COLDY:
+		_mode &= (~WARMY); //unset WARMY
+		_mode |= COLDY; //set COLDY
+		break;
+	}
+//	_mode &= (~COLDY); //HARD unset COLDY
+//	_mode |= WARMY; //HARD set WARMY
+//	if ( _mode & GAS) //Here check WARMY | COLDY mode
+//	{
+//		_mode = (GAS | WARMY); // HERE ALWAYS WARMY!!!
 
 //		int mode_state = pinState(_mode_pin);
 //
@@ -346,7 +362,7 @@ void HeatingSystem::check_mode()
 //		{
 //			_mode = (GAS | WARMY); //Thermostat turns OFF when there is too hot outside
 //		}
-	}
+//	}
 
 	//MODE output for debugging
 //	if (_mode & GAS)
