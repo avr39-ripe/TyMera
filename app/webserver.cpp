@@ -24,7 +24,7 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 		}
 		else
 		{
-			StaticJsonBuffer<ConfigJsonBufferSize> jsonBuffer;
+			DynamicJsonBuffer jsonBuffer;
 			JsonObject& root = jsonBuffer.parseObject(request.getBody());
 			root.prettyPrintTo(Serial); Serial.println(); //Uncomment it for debuging
 

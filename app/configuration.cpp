@@ -33,7 +33,7 @@ ThermConfig loadConfig()
 		cfg.cycle_interval = settings["cycle_interval"];
 		cfg.time_zone = settings["time_zone"];
 		cfg.twvalve_temp = settings["twvalve_temp"];
-		cfg.twvalve_temp = settings["twvalve_temp_delta"];
+		cfg.twvalve_temp_delta = settings["twvalve_temp_delta"];
 		cfg.twvalve_step_time = settings["twvalve_step_time"];
 		cfg.twvalve_edge_time = settings["twvalve_edge_time"];
 		cfg.zone_mode = settings["zone_mode"];
@@ -50,7 +50,7 @@ ThermConfig loadConfig()
 
 void saveConfig(ThermConfig& cfg)
 {
-	StaticJsonBuffer<ConfigJsonBufferSize> jsonBuffer;
+	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
 
 	JsonObject& network = jsonBuffer.createObject();
