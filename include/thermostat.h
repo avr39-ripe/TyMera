@@ -74,8 +74,8 @@ class Pump
 {
 public:
 	Pump(uint8_t pump_pin);
-	void turn_on();
-	void turn_off();
+	void turn_on(uint8_t turnOnNow = false);
+	void turn_off(uint8_t turnOffNow = false);
 	uint16_t _pump_on_delay;
 	uint16_t _pump_off_delay;
 private:

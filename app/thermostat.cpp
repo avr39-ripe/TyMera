@@ -81,13 +81,16 @@ void TerminalUnit::turn_off()
 	if (getState(out_reg, _circuit_pin) == true) //ensure terminal unit is really turned ON
 	{
 		setState(out_reg, _circuit_pin, false);
-		_heating_system->_pumps[_pump_id]->turn_off();
 		if (_heating_system->_mode & GAS)
+		{
+			_heating_system->_pumps[_pump_id]->turn_off(); //Turn OFF pump after some delay to let caldron cool down
 			_heating_system->caldron_turn_off();
+		}
 		if (_heating_system->_mode & WOOD)
 		{
+			_heating_system->_pumps[_pump_id]->turn_off(true); //Turn OFF pump immediately
 			tWValve->stop();
-			_heating_system->_pumps[TWVALVE_PUMP]->turn_off();
+			_heating_system->_pumps[TWVALVE_PUMP]->turn_off(true); //Turn off 3-way valve pump immediately
 		}
 	}
 }
@@ -173,24 +176,38 @@ Pump::Pump(uint8_t pump_pin)
 	this->_pump_off_delay = defaultDelay;
 }
 
-void Pump::turn_on()
+void Pump::turn_on(uint8_t turnOnNow)
 {
 	if (_consumers == 0)
 	{
-		this->_pumpTimer.initializeMs(ActiveConfig.pump_on_delay * 1000, TimerDelegate(&Pump::turn_on_delayed, this)).start(false);
+		if (turnOnNow)
+		{
+			setState(out_reg, _pump_pin, true);
+		}
+		else
+		{
+			this->_pumpTimer.initializeMs(ActiveConfig.pump_on_delay * 1000, TimerDelegate(&Pump::turn_on_delayed, this)).start(false);
+		}
 	}
 	_consumers++;
 
 
 }
 
-void Pump::turn_off()
+void Pump::turn_off(uint8_t turnOffNow)
 {
 	if (_consumers > 0)
 		_consumers--;
 	if (_consumers == 0)
 	{
-		this->_pumpTimer.initializeMs(ActiveConfig.pump_off_delay * 1000, TimerDelegate(&Pump::turn_off_delayed, this)).start(false);
+		if (turnOffNow)
+		{
+			setState(out_reg, _pump_pin, false);
+		}
+		else
+		{
+			this->_pumpTimer.initializeMs(ActiveConfig.pump_off_delay * 1000, TimerDelegate(&Pump::turn_off_delayed, this)).start(false);
+		}
 	}
 
 }
