@@ -22,6 +22,8 @@ const uint16_t thermostatsFileBufSize = 256;
 extern TempSensorsHttp *tempSensors;
 extern Thermostat *thermostat[maxThermostats];
 
+extern TWValve *tWValve;
+
 extern unsigned long counter; // Kind of heartbeat counter
 extern float temperature; // TyTherm accuired temperature
 

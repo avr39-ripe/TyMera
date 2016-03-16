@@ -9,7 +9,7 @@ const uint8_t temp_reads = 5;
 enum HeatingSystemModes { GAS = 1u, WOOD = 2u , WARMY = 4u, COLDY = 8u};
 
 //Pump indexes
-enum PumpIndexes {PUMP_1 = 0u, PUMP_2 = 1u };
+enum PumpIndexes {HIGH_T_PUMP_1 = 0u, LOW_T_PUMP_1 = 1u, HIGH_T_PUMP_2 = 2u, TWVALVE_PUMP = 3u };
 
 //Circuit types
 enum CircuitTypes {HIGH_TEMP = 0u, LOW_TEMP = 1u};
@@ -102,7 +102,7 @@ public:
 	float _mode_switch_temp_delta;
 	float _mode_curr_temp;
 	uint8_t _mode;
-	Pump* _pumps[2];
+	Pump* _pumps[4];
 	HWPump* _hwpump;
 private:
 	void _caldron_turn_on_delayed();

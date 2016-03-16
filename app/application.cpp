@@ -9,6 +9,7 @@ TempSensorsOW *localTempSensors;
 TempSensorsHttp *tempSensors;
 Thermostat *thermostat[maxThermostats];
 SwitchHttp officeSwitch("http://192.168.31.204/set_state");
+TWValve *tWValve;
 
 NtpClient ntpClient("pool.ntp.org", 300);
 
@@ -89,7 +90,7 @@ void init()
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=0");
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=1");
 	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=2");
-	tempSensors->addSensor("http://192.168.31.130/temperature.json?sensor=0");
+	tempSensors->addSensor("http://10.2.113.114/temperature.json?sensor=0");
 	thermostat[0] = new Thermostat(*localTempSensors,0,"Office", 4000);
 	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, &officeSwitch));
 	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);
@@ -118,10 +119,10 @@ void init()
 		}
 	}
 
-	auto tWValve = new TWValve(*localTempSensors,2,4,5);
+	tWValve = new TWValve(*localTempSensors,2,4,5);
 	tWValve->setTargetTemp(23);
 	tWValve->setTargetTempDelta(0.5);
-	tWValve->start();
+//	tWValve->start();
 
 	WifiEvents.onStationDisconnect(STADisconnect);
 	WifiEvents.onStationGotIP(STAGotIP);
@@ -151,7 +152,7 @@ void init()
 	SPITimer.initializeMs(200, SPI_loop).start();
 
 	HSystemTimer.initializeMs(2000, HSystem_loop).start();
-	HSystem._hwpump->cycle();
+//	HSystem._hwpump->cycle();
 
 //	// I2C bus config and init
 //    Wire.pins(scl_pin, sda_pin);

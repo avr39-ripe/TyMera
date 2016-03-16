@@ -22,14 +22,23 @@ TWValve::TWValve(TempSensors &tempSensors, uint8_t sensorId, uint8_t warmPin, ui
 
 void TWValve::start()
 {
-	_thermostat();
-	_refreshTimer.initializeMs(_refresh*1000, TimerDelegate(&TWValve::_thermostat, this)).start(true);
+	if (_consumers == 0)
+	{
+		_thermostat();
+		_refreshTimer.initializeMs(_refresh*1000, TimerDelegate(&TWValve::_thermostat, this)).start(true);
+	}
+	_consumers++;
 }
 
 void TWValve::stop()
 {
-	_refreshTimer.stop();
-	_valveTurn(TWValveDirection::COLD, _valveEdgeTime); //Default to full cold position
+	if (_consumers > 0)
+		_consumers--;
+	if (_consumers == 0)
+	{
+		_refreshTimer.stop();
+		_valveTurn(TWValveDirection::COLD, _valveEdgeTime); //Default to full cold position
+	}
 }
 
 void TWValve::_valveTurn(uint8_t direction, uint16_t moveTime)

@@ -15,7 +15,7 @@ struct ThermConfig
 //		sensorUrl = "http://10.2.113.114/state";
 
 		//HeatControl defaults
-		mode_switch_temp = 60; //C degree
+		mode_switch_temp = 25; //C degree 60 original
 		mode_switch_temp_delta = 1; //C dgree
 		pump_on_delay = 10; //seconds
 		pump_off_delay = 10; //seconds

@@ -8,7 +8,9 @@
 #ifndef INCLUDE_TWVALVE_H_
 #define INCLUDE_TWVALVE_H_
 #include <SmingCore/SmingCore.h>
-#include <octotherm.h>
+#include <tempsensors.h>
+#include <heatcontrol.h>
+//#include <octotherm.h>
 
 namespace TWValveDirection
 {
@@ -44,6 +46,7 @@ private:
 	uint16_t _valveStepTime = 10; // step to turn valve on, wait, turn valve off in SECONDS
 	uint16_t _valveEdgeTime = 130; // time valve goes from HOT edge to COLD edge in SECONDS
 	Timer _stopperTimer; // timer for turn valve on, wait(timer!), turn valve off
+	uint8_t _consumers = 0;
 	void _valveTurn(uint8_t direction, uint16_t moveTime);
 	void _thermostat();
 	void _valveStop();

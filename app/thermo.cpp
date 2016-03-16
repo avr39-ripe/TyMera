@@ -52,7 +52,7 @@ void Thermostat::check()
 			DateTime now = SystemClock.now(eTZ_Local);
 			SchedUnit daySchedule[maxProg] = _schedule[now.DayofWeek];
 			uint16_t nowMinutes = now.Hour * 60 + now.Minute;
-			Serial.printf("Name: %s, DateTime: %s,", _name.c_str(), now.toFullDateTimeString().c_str());
+//			Serial.printf("Name: %s, DateTime: %s,", _name.c_str(), now.toFullDateTimeString().c_str());
 
 			for (uint8_t i = 0; i < maxProg; i++)
 			{
@@ -64,13 +64,13 @@ void Thermostat::check()
 
 				if ( ((!dayTransit) && ((nowMinutes >= daySchedule[i].start) && (nowMinutes < daySchedule[nextIdx].start))) )
 				{
-					Serial.printf("AND selected Prog: %d ", i);
+//					Serial.printf("AND selected Prog: %d ", i);
 					currentProg = i;
 					break;
 				}
 				if ( ((dayTransit) && ((nowMinutes >= daySchedule[i].start) || (nowMinutes < daySchedule[nextIdx].start))) )
 				{
-					Serial.printf("OR selected Prog: %d ", i);
+//					Serial.printf("OR selected Prog: %d ", i);
 					currentProg = i;
 					break;
 				}
@@ -103,14 +103,14 @@ void Thermostat::check()
 			}
 		}
 
-		Serial.print("targetTemp: "); Serial.print(targetTemp); //FLOAT!!!
+//		Serial.print("targetTemp: "); Serial.print(targetTemp); //FLOAT!!!
 
 		if (currTemp >= targetTemp + (float)(_targetTempDelta / 100.0))
 			_state = false;
 		if (currTemp <= targetTemp - (float)(_targetTempDelta / 100.0))
 			_state = true;
 	}
-	Serial.printf(" State: %s\n", _state ? "true" : "false");
+//	Serial.printf(" State: %s\n", _state ? "true" : "false");
 	if (prevState != _state && onChangeState)
 	{
 		Serial.printf("onChangeState Delegate/CB called!\n");

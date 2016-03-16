@@ -66,6 +66,11 @@ void TerminalUnit::turn_on()
 		_heating_system->_pumps[_pump_id]->turn_on();
 		if (_heating_system->_mode & GAS)
 			_heating_system->caldron_turn_on();
+		if (_heating_system->_mode & WOOD)
+		{
+			tWValve->start();
+			_heating_system->_pumps[TWVALVE_PUMP]->turn_on();
+		}
 	}
 }
 
@@ -79,6 +84,11 @@ void TerminalUnit::turn_off()
 		_heating_system->_pumps[_pump_id]->turn_off();
 		if (_heating_system->_mode & GAS)
 			_heating_system->caldron_turn_off();
+		if (_heating_system->_mode & WOOD)
+		{
+			tWValve->stop();
+			_heating_system->_pumps[TWVALVE_PUMP]->turn_off();
+		}
 	}
 }
 
@@ -210,34 +220,36 @@ HeatingSystem::HeatingSystem(uint8_t mode_pin, uint8_t caldron_pin)
 	this->_temp_accum = 0;
 	this->_temp_counter =0;
 	//hwpump init
-	this->_hwpump = new HWPump(12);
-	this->_hwpump->_cycle_interval = 60; // in minutes
-	this->_hwpump->_cycle_duration = 5; // in minutes
-	this->_hwpump->_start_minutes = 420; // 7 * 60 = 7:00
-	this->_hwpump->_stop_minutes = 1380; // 23 * 60 = 23:00
+//	this->_hwpump = new HWPump(12);
+//	this->_hwpump->_cycle_interval = 60; // in minutes
+//	this->_hwpump->_cycle_duration = 5; // in minutes
+//	this->_hwpump->_start_minutes = 420; // 7 * 60 = 7:00
+//	this->_hwpump->_stop_minutes = 1380; // 23 * 60 = 23:00
 
 //	this->_hwpump->cycle();
 
 	//pumps init
-	this->_pumps[0] = new Pump(14); //HIGH_TEMP
-	this->_pumps[1] = new Pump(13); //LOW_TEMP
+	this->_pumps[0] = new Pump(14); //HIGH_TEMP_1
+	this->_pumps[1] = new Pump(13); //LOW_TEMP_1
+	this->_pumps[2] = new Pump(12); //HIGH_TEMP_1
+	this->_pumps[3] = new Pump(11); //TWVALVE
 	//rooms init
 	for(uint8_t room_id = 0; room_id < numRooms; room_id++)
 	{
 		this->_rooms[room_id] = new Room(room_id, this);
 	}
 	//assign each room corresponding TUs
-	this->_rooms[0]->_terminal_units[HIGH_TEMP] = new TerminalUnit(8, PUMP_1, this); // Badroom
-	this->_rooms[0]->_terminal_units[LOW_TEMP] = new TerminalUnit(0, PUMP_2, this);
+	this->_rooms[0]->_terminal_units[HIGH_TEMP] = new TerminalUnit(8, HIGH_T_PUMP_1, this); // Badroom
+	this->_rooms[0]->_terminal_units[LOW_TEMP] = new TerminalUnit(0, LOW_T_PUMP_1, this);
 
-	this->_rooms[1]->_terminal_units[HIGH_TEMP] = new TerminalUnit(9, PUMP_1, this); // Hallway
-	this->_rooms[1]->_terminal_units[LOW_TEMP] = new TerminalUnit(1, PUMP_2, this);
+	this->_rooms[1]->_terminal_units[HIGH_TEMP] = new TerminalUnit(9, HIGH_T_PUMP_1, this); // Hallway
+	this->_rooms[1]->_terminal_units[LOW_TEMP] = new TerminalUnit(1, LOW_T_PUMP_1, this);
 
-	this->_rooms[2]->_terminal_units[HIGH_TEMP] = new TerminalUnit(2, PUMP_1, this); // WC
+	this->_rooms[2]->_terminal_units[HIGH_TEMP] = new TerminalUnit(2, HIGH_T_PUMP_1, this); // WC
 	this->_rooms[2]->_terminal_units[LOW_TEMP] = nullptr;
 
-	this->_rooms[3]->_terminal_units[HIGH_TEMP] = new TerminalUnit(10, PUMP_1, this); // Hall
-	this->_rooms[3]->_terminal_units[LOW_TEMP] = new TerminalUnit(3, PUMP_2, this);
+	this->_rooms[3]->_terminal_units[HIGH_TEMP] = new TerminalUnit(10, HIGH_T_PUMP_1, this); // Hall
+	this->_rooms[3]->_terminal_units[LOW_TEMP] = new TerminalUnit(3, LOW_T_PUMP_1, this);
 
 //	this->_rooms[4]->_terminal_units[HIGH_TEMP] = nullptr;
 //	this->_rooms[4]->_terminal_units[LOW_TEMP] = new TerminalUnit(11, PUMP_2, this); // Kitchen
@@ -279,14 +291,19 @@ HeatingSystem::~HeatingSystem()
 
 void HeatingSystem::check_mode()
 {
+	_mode_curr_temp = localTempSensors->getTemp(1);
 	if ((_mode_curr_temp >= ActiveConfig.mode_switch_temp + ActiveConfig.mode_switch_temp_delta) && (_mode & GAS))
 	{
-		_mode = WOOD;
-		caldron_turn_off();
 		for(uint8_t room_id = 0; room_id < numRooms; room_id++)
 		{
-			_rooms[room_id]->turn_on();
+			_rooms[room_id]->turn_off();
 		}
+		_mode = WOOD;
+		caldron_turn_off();
+//		for(uint8_t room_id = 0; room_id < numRooms; room_id++)
+//		{
+//			_rooms[room_id]->turn_on();
+//		}
 	}
 	if ((_mode_curr_temp <= ActiveConfig.mode_switch_temp - ActiveConfig.mode_switch_temp_delta) && (_mode & WOOD))
 	{
@@ -297,19 +314,21 @@ void HeatingSystem::check_mode()
 		_mode = GAS;
 	}
 
-	if ( _mode & GAS)
+	if ( _mode & GAS) //Here check WARMY | COLDY mode
 	{
-		int mode_state = pinState(_mode_pin);
+		_mode = (GAS | WARMY); // HERE ALWAYS WARMY!!!
 
-		if ( (mode_state & PRESSED) && !(_mode & COLDY))
-		{
-			_mode = (GAS | COLDY); //Thermostat turns ON when there is too cold outside
-		}
-
-		if ( (mode_state & RELEASED) && !(_mode & WARMY))
-		{
-			_mode = (GAS | WARMY); //Thermostat turns OFF when there is too hot outside
-		}
+//		int mode_state = pinState(_mode_pin);
+//
+//		if ( (mode_state & PRESSED) && !(_mode & COLDY))
+//		{
+//			_mode = (GAS | COLDY); //Thermostat turns ON when there is too cold outside
+//		}
+//
+//		if ( (mode_state & RELEASED) && !(_mode & WARMY))
+//		{
+//			_mode = (GAS | WARMY); //Thermostat turns OFF when there is too hot outside
+//		}
 	}
 
 	//MODE output for debugging
@@ -363,33 +382,41 @@ void HeatingSystem::_caldron_turn_on_delayed()
 
 void HeatingSystem::check_room(uint8_t room_id)
 {
-	if (_mode & GAS)
+	if (thermostat[room_id]->getState())
 	{
-//		int thermostat_state = pinState(_rooms[room_id]->_thermostat_pin);
-//
-//		if (thermostat_state & PRESSED)
-//		{
-//			_rooms[room_id]->turn_on();
-//		}
-//
-//		if (thermostat_state & RELEASED)
-//		{
-//			_rooms[room_id]->turn_off();
-//		}
-		if (thermostat[room_id]->getState())
-		{
-			_rooms[room_id]->turn_on();
-		}
-		else
-		{
-			_rooms[room_id]->turn_off();
-		}
+		_rooms[room_id]->turn_on();
 	}
 	else
 	{
-		//To enshure that even after power fail, or reset or whatever - all rooms in WOOD mode are turned on
-		_rooms[room_id]->turn_on();
+		_rooms[room_id]->turn_off();
 	}
+//	if (_mode & GAS)
+//	{
+////		int thermostat_state = pinState(_rooms[room_id]->_thermostat_pin);
+////
+////		if (thermostat_state & PRESSED)
+////		{
+////			_rooms[room_id]->turn_on();
+////		}
+////
+////		if (thermostat_state & RELEASED)
+////		{
+////			_rooms[room_id]->turn_off();
+////		}
+////		if (thermostat[room_id]->getState())
+////		{
+////			_rooms[room_id]->turn_on();
+////		}
+////		else
+////		{
+////			_rooms[room_id]->turn_off();
+////		}
+//	}
+//	else
+//	{
+//		//To enshure that even after power fail, or reset or whatever - all rooms in WOOD mode are turned on
+//		_rooms[room_id]->turn_on();
+//	}
 }
 
 void HeatingSystem::check()

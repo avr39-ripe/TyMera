@@ -106,8 +106,9 @@ void onAJAXGetState(HttpRequest &request, HttpResponse &response)
 	JsonObject& json = stream->getRoot();
 
 	json["counter"] = counter;
-	json["temperature"] = tempSensors->getTemp();
-	json["healthy"] = tempSensors->isValid();
+	json["temperature"] = localTempSensors->getTemp(1); //show _mode_curr_temp here
+	json["healthy"] = localTempSensors->isValid(1);
+	json["mode"] = HSystem._mode;
 
 	response.sendJsonObject(stream);
 }
