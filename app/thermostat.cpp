@@ -118,7 +118,8 @@ void Room::turn_on()
 		else if (_terminal_units[HIGH_TEMP] != nullptr )
 			_terminal_units[HIGH_TEMP]->turn_on();
 	}
-	if ((_heating_system->_mode & WOOD) || (_heating_system->_mode & COLDY))
+//	if ((_heating_system->_mode & WOOD) || (_heating_system->_mode & COLDY))
+	if (_heating_system->_mode & COLDY)
 	{
 		if (_terminal_units[HIGH_TEMP] != nullptr )
 			_terminal_units[HIGH_TEMP]->turn_on();
@@ -152,7 +153,8 @@ void Room::turn_off()
 		if (_terminal_units[HIGH_TEMP] != nullptr )
 			_terminal_units[HIGH_TEMP]->turn_off();
 	}
-	if ((_heating_system->_mode & WOOD) || (_heating_system->_mode & WARMY))
+//	if ((_heating_system->_mode & WOOD) || (_heating_system->_mode & WARMY))
+	if (_heating_system->_mode & WARMY)
 	{
 		if (_terminal_units[HIGH_TEMP] != nullptr )
 			_terminal_units[HIGH_TEMP]->turn_off();
@@ -230,7 +232,7 @@ HeatingSystem::HeatingSystem(uint8_t mode_pin, uint8_t caldron_pin)
 	this->_caldron_consumers = 0;
 	this->_caldron_pin = caldron_pin;
 	this->_caldron_on_delay = defaultDelay;
-	this->_mode = GAS;
+	this->_mode = GAS | WARMY;
 	this->_mode_switch_temp = 60;
 	this->_mode_switch_temp_delta = 1;
 	this->_mode_curr_temp = 26.07;
@@ -337,12 +339,22 @@ void HeatingSystem::check_mode()
 	switch (ActiveConfig.zone_mode)
 	{
 	case WARMY:
-		_mode &= (~COLDY); //unset COLDY
-		_mode |= WARMY; //set WARMY
+		if (_mode & COLDY)
+		{
+//			for (auto room: _rooms)
+//				room->turn_off();
+			_mode &= (~COLDY); //unset COLDY
+			_mode |= WARMY; //set WARMY
+		}
 		break;
 	case COLDY:
-		_mode &= (~WARMY); //unset WARMY
-		_mode |= COLDY; //set COLDY
+		if (_mode & WARMY)
+		{
+//			for (auto room: _rooms)
+//				room->turn_off();
+			_mode &= (~WARMY); //unset WARMY
+			_mode |= COLDY; //set COLDY
+		}
 		break;
 	}
 //	_mode &= (~COLDY); //HARD unset COLDY
