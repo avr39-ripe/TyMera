@@ -11,8 +11,10 @@ Thermostat *thermostat[maxThermostats];
 SwitchHttp officeSwitch("http://192.168.31.204/set_state");
 TWValve *tWValve;
 
-NtpClient ntpClient("pool.ntp.org", 300);
+void onNtpReceive(NtpClient& client, time_t timestamp);
+NtpClient ntpClient("pool.ntp.org", 300, onNtpReceive);
 
+//void STAConnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t channel);
 void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason);
 void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway);
 
@@ -23,10 +25,16 @@ String _date_time_str = "";
 void HSystem_loop();
 
 #ifdef MCP23S17 //use MCP23S17 SPI_loop
-MCP inputchip(1, mcp23s17_cs);             // Instantiate an object called "inputchip" on an MCP23S17 device at  address 1 = 0b00000001 and CS pin = GPIO16
-MCP outputchip(0, mcp23s17_cs);            // Instantiate an object called "outputchip" on an MCP23S17 device at address 0 = 0b00000010 and CS pin = GPIO16
+MCP inputchip(0, mcp23s17_cs);             // Instantiate an object called "inputchip" on an MCP23S17 device at  address 1 = 0b00000001 and CS pin = GPIO16
+MCP outputchip(1, mcp23s17_cs);            // Instantiate an object called "outputchip" on an MCP23S17 device at address 0 = 0b00000010 and CS pin = GPIO16
 #endif
 //HeatControl Addition - STOP
+
+void onNtpReceive(NtpClient& client, time_t timestamp) {
+	SystemClock.setTime(timestamp, eTZ_UTC); //System timezone is LOCAL so to set it from UTC we specify TZ
+	DSRTC.set(timestamp); //DSRTC timezone is UTC so we need TZ-correct DSRTC.get()
+	Serial.printf("Time synchronized: %s\n", SystemClock.getSystemTimeString().c_str());
+}
 
 void onOfficeStateChange(bool state)
 {
@@ -75,8 +83,9 @@ void init()
 	system_update_cpu_freq(SYS_CPU_160MHZ);
 	wifi_set_sleep_type(NONE_SLEEP_T);
 
+
 	initialWifiConfig(); //One-time WIFI setup
-	wifi_station_dhcpc_set_maxtry(128); //SET DHCP MAXTRY
+
 
 	ActiveConfig = loadConfig();
 	ds.begin();
@@ -126,6 +135,7 @@ void init()
 	tWValve->setStepTime(ActiveConfig.twvalve_step_time);
 	tWValve->setEdgeTime(ActiveConfig.twvalve_edge_time);
 
+//	WifiEvents.onStationConnect(STAConnect);
 	WifiEvents.onStationDisconnect(STADisconnect);
 	WifiEvents.onStationGotIP(STAGotIP);
 
@@ -156,13 +166,13 @@ void init()
 	HSystemTimer.initializeMs(2000, HSystem_loop).start();
 //	HSystem._hwpump->cycle();
 
-//	// I2C bus config and init
-//    Wire.pins(scl_pin, sda_pin);
-//    Wire.begin();
-//
-//    //Initial setup & sync from DSRTC system clock
-//    SystemClock.setTimeZone(ActiveConfig.time_zone);
-//    SystemClock.setTime(DSRTC.get(), eTZ_UTC);
+	// I2C bus config and init
+    Wire.pins(scl_pin, sda_pin);
+    Wire.begin();
+
+    //Initial setup & sync from DSRTC system clock
+    SystemClock.setTimeZone(ActiveConfig.time_zone);
+    SystemClock.setTime(DSRTC.get(), eTZ_UTC);
 	//HeatControl Addition - STOP
 }
 
@@ -177,6 +187,12 @@ void counter_loop()
 //	counter = wifi_station_get_rssi();
 //	Serial.printf("RSSI: %d\n", counter);
 }
+//void STAConnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t channel)
+//{
+//	Serial.printf("DELEGATE CONNECT - SSID: %s, CHANNEL: %d\n", ssid.c_str(), channel);
+//	wifi_station_dhcpc_set_maxtry(64); //SET DHCP MAXTRY
+//
+//}
 void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason)
 {
 	Serial.printf("DELEGATE DISCONNECT - SSID: %s, REASON: %d\n", ssid.c_str(), reason);

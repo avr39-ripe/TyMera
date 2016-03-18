@@ -3,8 +3,11 @@
 #include <octotherm.h>
 
 #include <SmingCore/SPI.h>
-
-
+#ifdef MCP23S17 //use MCP23S17 SPI_loop
+#include <Libraries/MCP23S17/MCP23S17.h>
+using namespace MCP23S17Registers;
+using namespace MCP23S17Constants;
+#endif
 
 uint8_t out_reg[num_reg] = {255,255};
 //uint8_t out_reg_am[num_reg] = {255,255}; //TODO: for tests 1 and 2 channels made active HIGH for SSD RELAY (ALWAYS ACTIVE LOW)

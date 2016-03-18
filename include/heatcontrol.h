@@ -2,10 +2,10 @@
 #define INCLUDE_HEATCONTROL_H_
 
 //I2C stuff
-const uint8_t scl_pin = 0;
-const uint8_t sda_pin = 2;
+const uint8_t scl_pin = 5;
+const uint8_t sda_pin = 4;
 
-//#define MCP23S17
+#define MCP23S17
 //SPI_loop stuff
 #ifdef MCP23S17 //use MCP23S17 SPI_loop
 #include <Libraries/MCP23S17/MCP23S17.h>

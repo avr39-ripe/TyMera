@@ -3,6 +3,7 @@
 #include <configuration.h>
 #include <SmingCore/SmingCore.h>
 #include <Libraries/OneWire/OneWire.h>
+#include <Libraries/DS3232RTC/DS3232RTC.h>
 #include <tempsensors.h>
 #include <switch.h>
 #include <thermo.h>
