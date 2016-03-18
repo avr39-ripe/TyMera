@@ -72,6 +72,11 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 				tWValve->setTargetTempDelta(ActiveConfig.twvalve_temp_delta);
 				tWValve->setStepTime(ActiveConfig.twvalve_step_time);
 				tWValve->setEdgeTime(ActiveConfig.twvalve_edge_time);
+
+				ActiveConfig.sensorUrl = String((const char *)root["sensorUrl"]);
+				ActiveConfig.sensor1Url = String((const char *)root["sensor1Url"]);
+				ActiveConfig.switchUrl = String((const char *)root["switchUrl"]);
+				ActiveConfig.switch1Url = String((const char *)root["switch1Url"]);
 			}
 //			if (root["sensorUrl"].success())
 //			{
@@ -96,7 +101,11 @@ void onConfiguration_json(HttpRequest &request, HttpResponse &response)
 	json["StaSSID"] = ActiveConfig.StaSSID;
 	json["StaPassword"] = ActiveConfig.StaPassword;
 	json["StaEnable"] = ActiveConfig.StaEnable;
-//	json["sensorUrl"] = ActiveConfig.sensorUrl;
+
+	json["sensorUrl"] = ActiveConfig.sensorUrl;
+	json["sensor1Url"] = ActiveConfig.sensor1Url;
+	json["switchUrl"] = ActiveConfig.switchUrl;
+	json["switch1Url"] = ActiveConfig.switch1Url;
 
 	json["mode_switch_temp"] = ActiveConfig.mode_switch_temp;
 	json["mode_switch_temp_delta"] = ActiveConfig.mode_switch_temp_delta;

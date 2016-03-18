@@ -64,7 +64,11 @@ function post_config(event) {
 			'twvalve_temp_delta'		:	document.getElementById('twvalve_temp_delta').value,
 			'twvalve_step_time'			:	document.getElementById('twvalve_step_time').value,
 			'twvalve_edge_time'			:	document.getElementById('twvalve_edge_time').value,
-			'zone_mode'					:	(document.getElementById('zone_mode').checked ? Modes.COLDY : Modes.WARMY)
+			'zone_mode'					:	(document.getElementById('zone_mode').checked ? Modes.COLDY : Modes.WARMY),
+			'sensorUrl'					:	document.getElementById('sensorUrl').value,
+			'sensor1Url'				:	document.getElementById('sensor1Url').value,
+			'switchUrl'					:	document.getElementById('switchUrl').value,
+			'switch1Url'				:	document.getElementById('switch1Url').value
 
 			};
 	$.ajax({

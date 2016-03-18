@@ -20,6 +20,9 @@ ThermConfig loadConfig()
 
 		JsonObject& settings = root["settings"];
 		cfg.sensorUrl = String((const char*)settings["sensorUrl"]);
+		cfg.sensor1Url = String((const char*)settings["sensor1Url"]);
+		cfg.switchUrl = String((const char*)settings["switchUrl"]);
+		cfg.switch1Url = String((const char*)settings["switch1Url"]);
 		//HeatControl
 		cfg.mode_switch_temp = settings["mode_switch_temp"];
 		cfg.mode_switch_temp_delta = settings["mode_switch_temp_delta"];
@@ -62,6 +65,9 @@ void saveConfig(ThermConfig& cfg)
 	JsonObject& settings = jsonBuffer.createObject();
 	root["settings"] = settings;
 	settings["sensorUrl"] = cfg.sensorUrl;
+	settings["sensor1Url"] = cfg.sensor1Url;
+	settings["switchUrl"] = cfg.switchUrl;
+	settings["switch1Url"] = cfg.switch1Url;
 	//HeatControl
 	settings["mode_switch_temp"] = cfg.mode_switch_temp;
 	settings["mode_switch_temp_delta"] = cfg.mode_switch_temp_delta;
