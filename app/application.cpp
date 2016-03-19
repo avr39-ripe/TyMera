@@ -8,7 +8,7 @@ OneWire ds(onewire_pin);
 TempSensorsOW *localTempSensors;
 TempSensorsHttp *tempSensors;
 Thermostat *thermostat[maxThermostats];
-SwitchHttp officeSwitch("http://192.168.31.204/set_state");
+SwitchHttp *officeSwitch;
 TWValve *tWValve;
 
 void onNtpReceive(NtpClient& client, time_t timestamp);
@@ -39,7 +39,7 @@ void onNtpReceive(NtpClient& client, time_t timestamp) {
 void onOfficeStateChange(bool state)
 {
 	Serial.printf("Office state changed to %s!\n", state ? "true" : "false");
-	officeSwitch.setState(state);
+	officeSwitch->setState(state);
 }
 
 void initialWifiConfig()
@@ -97,13 +97,13 @@ void init()
 	localTempSensors->start();
 
 	tempSensors = new TempSensorsHttp(4000);
-//	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=0");
-//	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=1");
-//	tempSensors->addSensor("http://192.168.31.238/temperature.json?sensor=2");
 	tempSensors->addSensor(ActiveConfig.sensorUrl);
 	tempSensors->addSensor(ActiveConfig.sensor1Url);
+
+	officeSwitch = new SwitchHttp(ActiveConfig.switchUrl);
+
 	thermostat[0] = new Thermostat(*localTempSensors,0,"Office", 4000);
-	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, &officeSwitch));
+	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
 	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);
 	thermostat[2] = new Thermostat(*tempSensors,0,"Hall", 4000);
 	thermostat[3] = new Thermostat(*tempSensors,1,"Bedroom", 4000);
@@ -222,5 +222,5 @@ void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway)
 	tempSensors->start();
 	for (auto _thermostat: thermostat)
 		_thermostat->start();
-	officeSwitch.start();
+	officeSwitch->start();
 }
