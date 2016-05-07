@@ -20,7 +20,7 @@ void SPI_loop()
 	uint16_t inupt_reg_val;
 	uint16_t output_reg_val;
 
-	counter++;
+//	counter++;
 // Read data from MCP23S17
 //	inupt_reg_val = inputchip.digitalRead();
 //	in_reg[0] = inupt_reg_val && 0xFF;
