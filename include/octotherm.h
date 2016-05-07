@@ -22,6 +22,7 @@ const uint16_t thermostatsFileBufSize = 256;
 
 extern TempSensorsHttp *tempSensors;
 extern Thermostat *thermostat[maxThermostats];
+extern SwitchHttp *httpSwitch[maxThermostats];
 
 extern TWValve *tWValve;
 

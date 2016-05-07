@@ -8,7 +8,8 @@ OneWire ds(onewire_pin);
 TempSensorsOW *localTempSensors;
 TempSensorsHttp *tempSensors;
 Thermostat *thermostat[maxThermostats];
-SwitchHttp *officeSwitch;
+SwitchHttp *httpSwitch[maxThermostats];
+//SwitchHttp *officeSwitch;
 TWValve *tWValve;
 
 void onNtpReceive(NtpClient& client, time_t timestamp);
@@ -36,11 +37,11 @@ void onNtpReceive(NtpClient& client, time_t timestamp) {
 	Serial.printf("Time synchronized: %s\n", SystemClock.getSystemTimeString().c_str());
 }
 
-void onOfficeStateChange(bool state)
-{
-	Serial.printf("Office state changed to %s!\n", state ? "true" : "false");
-	officeSwitch->setState(state);
-}
+//void onOfficeStateChange(bool state)
+//{
+//	Serial.printf("Office state changed to %s!\n", state ? "true" : "false");
+//	officeSwitch->setState(state);
+//}
 
 void initialWifiConfig()
 {
@@ -100,13 +101,18 @@ void init()
 	tempSensors->addSensor(ActiveConfig.sensorUrl);
 	tempSensors->addSensor(ActiveConfig.sensor1Url);
 
-	officeSwitch = new SwitchHttp(ActiveConfig.switchUrl);
+//	officeSwitch = new SwitchHttp(ActiveConfig.switchUrl);
+	httpSwitch[0] = nullptr;
+	httpSwitch[1] = nullptr;
+	httpSwitch[2] = new SwitchHttp(ActiveConfig.switchUrl);
+	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch1Url);
 
 	thermostat[0] = new Thermostat(*localTempSensors,0,"Office", 4000);
-	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
+//	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
 	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);
 	thermostat[2] = new Thermostat(*tempSensors,0,"Hall", 4000);
 	thermostat[3] = new Thermostat(*tempSensors,1,"Bedroom", 4000);
+	thermostat[3]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[3]));
 
 	for(uint8_t i = 0; i< 7; i++)
 	{
@@ -222,5 +228,7 @@ void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway)
 	tempSensors->start();
 	for (auto _thermostat: thermostat)
 		_thermostat->start();
-	officeSwitch->start();
+	for (auto _httpSwitch: httpSwitch)
+			_httpSwitch->start();
+//	officeSwitch->start();
 }
