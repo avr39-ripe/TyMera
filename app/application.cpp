@@ -111,6 +111,7 @@ void init()
 //	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
 	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);
 	thermostat[2] = new Thermostat(*tempSensors,0,"Hall", 4000);
+	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
 	thermostat[3] = new Thermostat(*tempSensors,1,"Bedroom", 4000);
 	thermostat[3]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[3]));
 
@@ -229,6 +230,11 @@ void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway)
 	for (auto _thermostat: thermostat)
 		_thermostat->start();
 	for (auto _httpSwitch: httpSwitch)
+	{
+		if (_httpSwitch != nullptr)
+		{
 			_httpSwitch->start();
+		}
+	}
 //	officeSwitch->start();
 }
