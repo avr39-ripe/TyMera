@@ -47,10 +47,14 @@ public:
 	TerminalUnit(uint8_t circuit_pin, uint8_t pump_id, HeatingSystem* heating_system);
 	void turn_on();
 	void turn_off();
-	inline bool is_on() { return getState(out_reg, _circuit_pin); };
+	uint8_t get_State() { return _state; };
+	void set_State(uint8_t state) { _state = state; };
+//	inline bool is_on() { return getState(out_reg, _circuit_pin); };
+	inline bool is_on() { return get_State(); };
 	uint8_t _circuit_pin;
 	uint8_t _pump_id;
 private:
+	uint8_t _state = false;
 	HeatingSystem* _heating_system;
 };
 

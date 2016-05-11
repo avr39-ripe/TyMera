@@ -60,8 +60,10 @@ void TerminalUnit::turn_on()
 {
 //XXX DO NOT CHECK FOR tu == nullptr here! DO IT OUTSIDE BEFORE CALL THIS!!!
 
-	if (getState(out_reg, _circuit_pin) == false) //ensure room is really turned OFF
+//	if (getState(out_reg, _circuit_pin) == false) //ensure room is really turned OFF
+	if (get_State() == false) //ensure room is really turned OFF
 	{
+		set_State(true);
 		setState(out_reg, _circuit_pin, true);
 		_heating_system->_pumps[_pump_id]->turn_on();
 		if (_heating_system->_mode & GAS)
@@ -78,8 +80,10 @@ void TerminalUnit::turn_off()
 {
 //XXX DO NOT CHECK FOR tu == nullptr here! DO IT OUTSIDE BEFORE CALL THIS!!!
 
-	if (getState(out_reg, _circuit_pin) == true) //ensure terminal unit is really turned ON
+//	if (getState(out_reg, _circuit_pin) == true) //ensure terminal unit is really turned ON
+	if (get_State() == true) //ensure terminal unit is really turned ON
 	{
+		set_State(false);
 		setState(out_reg, _circuit_pin, false);
 		if (_heating_system->_mode & GAS)
 		{
