@@ -82,7 +82,7 @@ void init()
 
 //	Serial.printf("COMPILE-IN SSID: %s, PASSWORD: %s\n", WIFI_SSID, WIFI_PWD);
 
-	SystemClock.setTimeZone(2);
+	SystemClock.setTimeZone(ActiveConfig.time_zone);
 
 	//SET higher CPU freq & disable wifi sleep
 	system_update_cpu_freq(SYS_CPU_160MHZ);
