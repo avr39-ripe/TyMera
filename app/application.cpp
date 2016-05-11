@@ -114,13 +114,13 @@ void init()
 	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch2Url); // Outbuilding
 
 	thermostat[0] = new Thermostat(*tempSensors,0,"Bedroom", 4000);
-	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[0]));
+//	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[0]));
 	thermostat[1] = new Thermostat(*tempSensors,1,"Guestroom", 4000);
-	thermostat[1]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[1]));
+//	thermostat[1]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[1]));
 	thermostat[2] = new Thermostat(*tempSensors,2,"Hall", 4000);
-//	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
+////	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
 	thermostat[3] = new Thermostat(*tempSensors,3,"Outbuilding", 4000);
-	thermostat[3]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[3]));
+//	thermostat[3]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[3]));
 
 	for(uint8_t i = 0; i< 7; i++)
 	{
