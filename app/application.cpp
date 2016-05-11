@@ -144,7 +144,7 @@ void init()
 		}
 	}
 
-	tWValve = new TWValve(*localTempSensors,2,4,5);
+	tWValve = new TWValve(*localTempSensors,2,0,1);
 	tWValve->setTargetTemp(ActiveConfig.twvalve_temp);
 	tWValve->setTargetTempDelta(ActiveConfig.twvalve_temp_delta);
 	tWValve->setStepTime(ActiveConfig.twvalve_step_time);

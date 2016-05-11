@@ -260,10 +260,10 @@ HeatingSystem::HeatingSystem(uint8_t mode_pin, uint8_t caldron_pin)
 //	this->_hwpump->cycle();
 
 	//pumps init
-	this->_pumps[0] = new Pump(14); //HIGH_TEMP_1
-	this->_pumps[1] = new Pump(13); //LOW_TEMP_1
-	this->_pumps[2] = new Pump(12); //HIGH_TEMP_1
-	this->_pumps[3] = new Pump(11); //TWVALVE
+	this->_pumps[0] = new Pump(5); //HIGH_TEMP_1
+	this->_pumps[1] = new Pump(4); //LOW_TEMP_1
+	this->_pumps[2] = new Pump(3); //HIGH_TEMP_2
+	this->_pumps[3] = new Pump(2); //TWVALVE
 	//rooms init
 	for(uint8_t room_id = 0; room_id < numRooms; room_id++)
 	{
@@ -550,4 +550,4 @@ void HeatingSystem::check()
 //}
 
 //HeatingSystem initialisation
-HeatingSystem HSystem(9, 15);
+HeatingSystem HSystem(9, 6);
