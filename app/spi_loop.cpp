@@ -25,8 +25,8 @@ void SPI_loop()
 //	inupt_reg_val = inputchip.digitalRead();
 //	in_reg[0] = inupt_reg_val && 0xFF;
 //	in_reg[1] = ((inupt_reg_val >> 8) && 0xFF);
-	in_reg[0] = inputchip.byteRead(GPIOB);
-	in_reg[1] = inputchip.byteRead(GPIOA);
+//	in_reg[0] = inputchip.byteRead(GPIOB);
+//	in_reg[1] = inputchip.byteRead(GPIOA);
 // Write data to MCP23S17
 //	output_reg_val = out_reg[0];
 //	output_reg_val |= (out_reg[1] << 8);

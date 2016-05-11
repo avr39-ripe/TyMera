@@ -26,7 +26,7 @@ String _date_time_str = "";
 void HSystem_loop();
 
 #ifdef MCP23S17 //use MCP23S17 SPI_loop
-MCP inputchip(0, mcp23s17_cs);             // Instantiate an object called "inputchip" on an MCP23S17 device at  address 1 = 0b00000001 and CS pin = GPIO16
+//MCP inputchip(0, mcp23s17_cs);             // Instantiate an object called "inputchip" on an MCP23S17 device at  address 1 = 0b00000001 and CS pin = GPIO16
 MCP outputchip(1, mcp23s17_cs);            // Instantiate an object called "outputchip" on an MCP23S17 device at address 0 = 0b00000010 and CS pin = GPIO16
 #endif
 //HeatControl Addition - STOP
@@ -53,11 +53,13 @@ void initialWifiConfig()
 			WifiAccessPoint.config("TyMera", "20040229", AUTH_WPA2_PSK);
 
 		}
-		else
-			Serial.printf("AccessPoint already configured.\n");
+//		else
+//		{
+//			Serial.printf("AccessPoint already configured.\n");
+//		}
 	}
 	else
-		Serial.println("AP NOT Started! - Get config failed!");
+//		Serial.println("AP NOT Started! - Get config failed!");
 
 	if (WifiStation.getSSID().length() == 0)
 	{
@@ -65,8 +67,10 @@ void initialWifiConfig()
 		WifiStation.enable(true, true);
 		WifiAccessPoint.enable(false, true);
 	}
-	else
-		Serial.printf("Station already configured.\n");
+//	else
+//	{
+////		Serial.printf("Station already configured.\n");
+//	}
 }
 
 void init()
@@ -76,7 +80,7 @@ void init()
 	Serial.systemDebugOutput(false);
 	Serial.commandProcessing(false);
 
-	Serial.printf("COMPILE-IN SSID: %s, PASSWORD: %s\n", WIFI_SSID, WIFI_PWD);
+//	Serial.printf("COMPILE-IN SSID: %s, PASSWORD: %s\n", WIFI_SSID, WIFI_PWD);
 
 	SystemClock.setTimeZone(2);
 
@@ -105,14 +109,14 @@ void init()
 
 //	officeSwitch = new SwitchHttp(ActiveConfig.switchUrl);
 	httpSwitch[0] = nullptr;
-	httpSwitch[1] = new SwitchHttp(ActiveConfig.switchUrl);
-	httpSwitch[2] = new SwitchHttp(ActiveConfig.switch1Url);
-	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch2Url);
+	httpSwitch[1] = new SwitchHttp(ActiveConfig.switch2Url);
+	httpSwitch[2] = new SwitchHttp(ActiveConfig.switchUrl);
+	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch1Url);
 
 	thermostat[0] = new Thermostat(*tempSensors,0,"Office", 4000);
 //	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
 	thermostat[1] = new Thermostat(*tempSensors,1,"Kitchen", 4000);
-	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[1]));
+	thermostat[1]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[1]));
 	thermostat[2] = new Thermostat(*tempSensors,2,"Hall", 4000);
 	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
 	thermostat[3] = new Thermostat(*tempSensors,3,"Bedroom", 4000);
@@ -157,10 +161,10 @@ void init()
 	//HeatControl Addition - START
 	//SPI_loop init
 	#ifdef MCP23S17 //use MCP23S17 SPI_loop
-		inputchip.begin();
-		outputchip.begin();
-		inputchip.pinMode(0xFFFF);     // Use word-write mode to set all of the pins on inputchip to be inputs
-		inputchip.pullupMode(0xFFFF);  // Use word-write mode to Turn on the internal pull-up resistors.
+//		inputchip.begin();
+//		outputchip.begin();
+//		inputchip.pinMode(0xFFFF);     // Use word-write mode to set all of the pins on inputchip to be inputs
+//		inputchip.pullupMode(0xFFFF);  // Use word-write mode to Turn on the internal pull-up resistors.
 	//	inputchip.inputInvert(0x0000); // Use word-write mode to invert the inputs so that logic 0 is read as HIGH
 		outputchip.pinMode(0x0000);    // Use word-write mode to Set all of the pins on outputchip to be outputs
 

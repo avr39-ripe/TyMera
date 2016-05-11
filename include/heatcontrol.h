@@ -10,7 +10,7 @@ const uint8_t sda_pin = 4;
 #ifdef MCP23S17 //use MCP23S17 SPI_loop
 #include <Libraries/MCP23S17/MCP23S17.h>
 const byte mcp23s17_cs = 15; // MCP23S17 ChipSelect pin
-extern MCP inputchip;
+//extern MCP inputchip;
 extern MCP outputchip;
 #endif
 const int miso_pin = 12; // 74hc165 data out
