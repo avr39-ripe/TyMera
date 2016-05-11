@@ -73,6 +73,8 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 				tWValve->setStepTime(ActiveConfig.twvalve_step_time);
 				tWValve->setEdgeTime(ActiveConfig.twvalve_edge_time);
 
+				ActiveConfig.time_zone = root["time_zone"];
+
 				ActiveConfig.sensorUrl = String((const char *)root["sensorUrl"]);
 				ActiveConfig.sensor1Url = String((const char *)root["sensor1Url"]);
 				ActiveConfig.sensor2Url = String((const char *)root["sensor2Url"]);
@@ -104,6 +106,8 @@ void onConfiguration_json(HttpRequest &request, HttpResponse &response)
 	json["StaSSID"] = ActiveConfig.StaSSID;
 	json["StaPassword"] = ActiveConfig.StaPassword;
 	json["StaEnable"] = ActiveConfig.StaEnable;
+
+	json["time_zone"] = ActiveConfig.time_zone;
 
 	json["sensorUrl"] = ActiveConfig.sensorUrl;
 	json["sensor1Url"] = ActiveConfig.sensor1Url;

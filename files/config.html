@@ -88,7 +88,9 @@
 								<label for="caldron_on_delay">Caldron on delay, sec</label>
 								<input type="number" required class="form-control" min="10" max="600" step="1" id="caldron_on_delay" name="caldron_on_delay" value="{c_on_d}">
 							</div>
-							<div class="form-group">
+							
+							<!-- HIDDEN BLOCK -->
+							<div style="display:none;" class="form-group">
 								<label for="room_off_delay">Warm floor off delay in Coldy mode, sec</label>
 								<input type="number" required class="form-control" min="15" max="7200" step="1" id="room_off_delay" name="room_off_delay" value="{room_off_delay}">
 							</div>
@@ -109,36 +111,44 @@
 								<label for="twvalve_edge_time">Set 3-way valve edge time, sec</label>
 								<input type="number" required class="form-control" min="5" max="500" step="1" id="twvalve_edge_time" name="twvalve_edge_time" value="{twvalve_edge_time}">
 							</div>
+							
 							<div class="form-group">
+								<label for="time_zone">Set System Time Zone, hours from GMT</label>
+								<input type="number" required class="form-control" min="-12" max="12" step="1" id="time_zone" name="time_zone" value="{time_zone}">
+							</div>
+							
+							<!-- HIDDEN BLOCK -->
+							<div style="display:none;" class="form-group">
 								<label for="zone_mode">Set zone mode to COLDY</label>
 								<input type="checkbox" id="zone_mode" name="zone_mode" class="form-control">
 					  		</div>
+					  		
 					  		<div class="form-group">
-								<label for="sensorUrl">SensorUrl</label>
+								<label for="sensorUrl">Bedroom sensor URL</label>
 								<input type="text" id="sensorUrl" name="sensorUrl" class="form-control" value="{sensorUrl}">
 							</div>
 							<div class="form-group">
-								<label for="sensor1Url">Sensor1Url</label>
+								<label for="sensor1Url">Guestroom sensor URL</label>
 								<input type="text" id="sensor1Url" name="sensor1Url" class="form-control" value="{sensor1Url}">
 							</div>
 							<div class="form-group">
-								<label for="sensor2Url">Sensor2Url</label>
+								<label for="sensor2Url">Hall sensor URL</label>
 								<input type="text" id="sensor2Url" name="sensor2Url" class="form-control" value="{sensor2Url}">
 							</div>
 							<div class="form-group">
-								<label for="sensor3Url">Sensor3Url</label>
+								<label for="sensor3Url">Outbuilding sensor URL</label>
 								<input type="text" id="sensor3Url" name="sensor3Url" class="form-control" value="{sensor3Url}">
 							</div>
 							<div class="form-group">
-								<label for="switchUrl">SwitchUrl</label>
+								<label for="switchUrl">Bedroom switch URL</label>
 								<input type="text" id="switchUrl" name="switchUrl" class="form-control" value="{switchUrl}">
 							</div>
 							<div class="form-group">
-								<label for="switch1Url">Switch1Url</label>
+								<label for="switch1Url">Guestroom switch URL</label>
 								<input type="text" id="switch1Url" name="switch1Url" class="form-control" value="{switc1hUrl}">
 							</div>
 							<div class="form-group">
-								<label for="switch2Url">Switch2Url</label>
+								<label for="switch2Url">Outbuilding switch URL</label>
 								<input type="text" id="switch2Url" name="switch2Url" class="form-control" value="{switc2hUrl}">
 							</div>
 							<button type="submit" class="btn btn-success">Save settings</button>

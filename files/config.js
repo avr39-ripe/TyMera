@@ -65,6 +65,7 @@ function post_config(event) {
 			'twvalve_step_time'			:	document.getElementById('twvalve_step_time').value,
 			'twvalve_edge_time'			:	document.getElementById('twvalve_edge_time').value,
 			'zone_mode'					:	(document.getElementById('zone_mode').checked ? Modes.COLDY : Modes.WARMY),
+			'time_zone'					:	document.getElementById('time_zone').value,
 			'sensorUrl'					:	document.getElementById('sensorUrl').value,
 			'sensor1Url'				:	document.getElementById('sensor1Url').value,
 			'sensor2Url'				:	document.getElementById('sensor2Url').value,

@@ -31,8 +31,8 @@ $( document ).ready(function() {
 			var modePanel = document.getElementById('mode');
 			if (data.mode & Modes.WOOD) {modePanel.textContent = "Wood";}
 			if (data.mode & Modes.GAS) {modePanel.textContent = "Gas";} //GAS by now, will change later to Warmy again
-			if (data.mode & Modes.COLDY) {modePanel.textContent += " Coldy";}
-			if (data.mode & Modes.WARMY) {modePanel.textContent += " Warmy";}
+			// if (data.mode & Modes.COLDY) {modePanel.textContent += " Coldy";}
+			// if (data.mode & Modes.WARMY) {modePanel.textContent += " Warmy";}
 			setTimeout(worker, 5000);
 		});
 	})();
