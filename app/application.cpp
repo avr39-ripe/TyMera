@@ -162,7 +162,7 @@ void init()
 	//SPI_loop init
 	#ifdef MCP23S17 //use MCP23S17 SPI_loop
 //		inputchip.begin();
-//		outputchip.begin();
+		outputchip.begin();
 //		inputchip.pinMode(0xFFFF);     // Use word-write mode to set all of the pins on inputchip to be inputs
 //		inputchip.pullupMode(0xFFFF);  // Use word-write mode to Turn on the internal pull-up resistors.
 	//	inputchip.inputInvert(0x0000); // Use word-write mode to invert the inputs so that logic 0 is read as HIGH
