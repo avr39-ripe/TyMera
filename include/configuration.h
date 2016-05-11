@@ -12,10 +12,13 @@ struct ThermConfig
 	ThermConfig()
 	{
 		StaEnable = 1; //Enable WIFI Client
-		sensorUrl = "http://192.168.31.133/temperature.json?sensor=0";
-		sensor1Url = "http://192.168.31.130/temperature.json?sensor=0";
-		switchUrl = "http://192.168.31.204/set_state";
-		switch1Url = "http://192.168.31.204/set_state";
+		sensorUrl = "http://192.168.31.130/temperature.json?sensor=0";
+		sensor1Url = "http://192.168.31.131/temperature.json?sensor=0";
+		sensor2Url = "http://192.168.31.132/temperature.json?sensor=0";
+		sensor3Url = "http://192.168.31.133/temperature.json?sensor=0";
+		switchUrl = "http://192.168.31.134/set_state";
+		switch1Url = "http://192.168.31.135/set_state";
+		switch2Url = "http://192.168.31.136/set_state";
 //		sensorUrl = "http://10.2.113.114/state";
 
 		//HeatControl defaults
@@ -43,8 +46,11 @@ struct ThermConfig
 	//OctoTherm settings
 	String sensorUrl;
 	String sensor1Url;
+	String sensor2Url;
+	String sensor3Url;
 	String switchUrl;
 	String switch1Url;
+	String switch2Url;
 	// HeatControl settings
 	float mode_switch_temp;
 	float mode_switch_temp_delta;

@@ -75,8 +75,11 @@ void onConfiguration(HttpRequest &request, HttpResponse &response)
 
 				ActiveConfig.sensorUrl = String((const char *)root["sensorUrl"]);
 				ActiveConfig.sensor1Url = String((const char *)root["sensor1Url"]);
+				ActiveConfig.sensor2Url = String((const char *)root["sensor2Url"]);
+				ActiveConfig.sensor3Url = String((const char *)root["sensor3Url"]);
 				ActiveConfig.switchUrl = String((const char *)root["switchUrl"]);
 				ActiveConfig.switch1Url = String((const char *)root["switch1Url"]);
+				ActiveConfig.switch2Url = String((const char *)root["switch2Url"]);
 			}
 //			if (root["sensorUrl"].success())
 //			{
@@ -104,8 +107,11 @@ void onConfiguration_json(HttpRequest &request, HttpResponse &response)
 
 	json["sensorUrl"] = ActiveConfig.sensorUrl;
 	json["sensor1Url"] = ActiveConfig.sensor1Url;
+	json["sensor2Url"] = ActiveConfig.sensor2Url;
+	json["sensor3Url"] = ActiveConfig.sensor3Url;
 	json["switchUrl"] = ActiveConfig.switchUrl;
 	json["switch1Url"] = ActiveConfig.switch1Url;
+	json["switch2Url"] = ActiveConfig.switch2Url;
 
 	json["mode_switch_temp"] = ActiveConfig.mode_switch_temp;
 	json["mode_switch_temp_delta"] = ActiveConfig.mode_switch_temp_delta;

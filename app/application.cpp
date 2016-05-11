@@ -100,19 +100,22 @@ void init()
 	tempSensors = new TempSensorsHttp(4000);
 	tempSensors->addSensor(ActiveConfig.sensorUrl);
 	tempSensors->addSensor(ActiveConfig.sensor1Url);
+	tempSensors->addSensor(ActiveConfig.sensor2Url);
+	tempSensors->addSensor(ActiveConfig.sensor3Url);
 
 //	officeSwitch = new SwitchHttp(ActiveConfig.switchUrl);
 	httpSwitch[0] = nullptr;
-	httpSwitch[1] = nullptr;
-	httpSwitch[2] = new SwitchHttp(ActiveConfig.switchUrl);
-	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch1Url);
+	httpSwitch[1] = new SwitchHttp(ActiveConfig.switchUrl);
+	httpSwitch[2] = new SwitchHttp(ActiveConfig.switch1Url);
+	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch2Url);
 
-	thermostat[0] = new Thermostat(*localTempSensors,0,"Office", 4000);
+	thermostat[0] = new Thermostat(*tempSensors,0,"Office", 4000);
 //	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
-	thermostat[1] = new Thermostat(*localTempSensors,1,"Kitchen", 4000);
-	thermostat[2] = new Thermostat(*tempSensors,0,"Hall", 4000);
+	thermostat[1] = new Thermostat(*tempSensors,1,"Kitchen", 4000);
+	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[1]));
+	thermostat[2] = new Thermostat(*tempSensors,2,"Hall", 4000);
 	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
-	thermostat[3] = new Thermostat(*tempSensors,1,"Bedroom", 4000);
+	thermostat[3] = new Thermostat(*tempSensors,3,"Bedroom", 4000);
 	thermostat[3]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[3]));
 
 	for(uint8_t i = 0; i< 7; i++)

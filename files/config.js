@@ -67,8 +67,11 @@ function post_config(event) {
 			'zone_mode'					:	(document.getElementById('zone_mode').checked ? Modes.COLDY : Modes.WARMY),
 			'sensorUrl'					:	document.getElementById('sensorUrl').value,
 			'sensor1Url'				:	document.getElementById('sensor1Url').value,
+			'sensor2Url'				:	document.getElementById('sensor2Url').value,
+			'sensor3Url'				:	document.getElementById('sensor3Url').value,
 			'switchUrl'					:	document.getElementById('switchUrl').value,
-			'switch1Url'				:	document.getElementById('switch1Url').value
+			'switch1Url'				:	document.getElementById('switch1Url').value,
+			'switch2Url'				:	document.getElementById('switch2Url').value
 
 			};
 	$.ajax({
