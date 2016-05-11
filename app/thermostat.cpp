@@ -262,17 +262,17 @@ HeatingSystem::HeatingSystem(uint8_t mode_pin, uint8_t caldron_pin)
 		this->_rooms[room_id] = new Room(room_id, this);
 	}
 	//assign each room corresponding TUs
-	this->_rooms[0]->_terminal_units[HIGH_TEMP] = new TerminalUnit(8, HIGH_T_PUMP_1, this); // Badroom
-	this->_rooms[0]->_terminal_units[LOW_TEMP] = new TerminalUnit(0, LOW_T_PUMP_1, this);
+	this->_rooms[0]->_terminal_units[HIGH_TEMP] = new TerminalUnit(0, HIGH_T_PUMP_1, this); // Bedroom
+	this->_rooms[0]->_terminal_units[LOW_TEMP] = nullptr;
 
-	this->_rooms[1]->_terminal_units[HIGH_TEMP] = new TerminalUnit(9, HIGH_T_PUMP_1, this); // Hallway
-	this->_rooms[1]->_terminal_units[LOW_TEMP] = new TerminalUnit(1, LOW_T_PUMP_1, this);
+	this->_rooms[1]->_terminal_units[HIGH_TEMP] = new TerminalUnit(1, HIGH_T_PUMP_1, this); // Guestroom
+	this->_rooms[1]->_terminal_units[LOW_TEMP] = nullptr;
 
-	this->_rooms[2]->_terminal_units[HIGH_TEMP] = new TerminalUnit(2, HIGH_T_PUMP_1, this); // WC
-	this->_rooms[2]->_terminal_units[LOW_TEMP] = nullptr;
+	this->_rooms[2]->_terminal_units[HIGH_TEMP] = nullptr;
+	this->_rooms[2]->_terminal_units[LOW_TEMP] = new TerminalUnit(2, LOW_T_PUMP_1, this); // Hall
 
-	this->_rooms[3]->_terminal_units[HIGH_TEMP] = new TerminalUnit(10, HIGH_T_PUMP_1, this); // Hall
-	this->_rooms[3]->_terminal_units[LOW_TEMP] = new TerminalUnit(3, LOW_T_PUMP_1, this);
+	this->_rooms[3]->_terminal_units[HIGH_TEMP] = new TerminalUnit(3, HIGH_T_PUMP_2, this); // outbuilding
+	this->_rooms[3]->_terminal_units[LOW_TEMP] = nullptr;
 
 //	this->_rooms[4]->_terminal_units[HIGH_TEMP] = nullptr;
 //	this->_rooms[4]->_terminal_units[LOW_TEMP] = new TerminalUnit(11, PUMP_2, this); // Kitchen

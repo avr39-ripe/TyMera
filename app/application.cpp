@@ -102,24 +102,24 @@ void init()
 	localTempSensors->start();
 
 	tempSensors = new TempSensorsHttp(4000);
-	tempSensors->addSensor(ActiveConfig.sensorUrl);
-	tempSensors->addSensor(ActiveConfig.sensor1Url);
-	tempSensors->addSensor(ActiveConfig.sensor2Url);
-	tempSensors->addSensor(ActiveConfig.sensor3Url);
+	tempSensors->addSensor(ActiveConfig.sensorUrl); // Badroom
+	tempSensors->addSensor(ActiveConfig.sensor1Url); // Guestroom
+	tempSensors->addSensor(ActiveConfig.sensor2Url); // Hall
+	tempSensors->addSensor(ActiveConfig.sensor3Url); // Outbuilding
 
 //	officeSwitch = new SwitchHttp(ActiveConfig.switchUrl);
-	httpSwitch[0] = nullptr;
-	httpSwitch[1] = new SwitchHttp(ActiveConfig.switch2Url);
-	httpSwitch[2] = new SwitchHttp(ActiveConfig.switchUrl);
-	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch1Url);
+	httpSwitch[0] = new SwitchHttp(ActiveConfig.switchUrl); // Badroom
+	httpSwitch[1] = new SwitchHttp(ActiveConfig.switch1Url); // Guestroom
+	httpSwitch[2] = nullptr; // NO THERMOHEAD for Hall, Warm floor
+	httpSwitch[3] = new SwitchHttp(ActiveConfig.switch2Url); // Outbuilding
 
-	thermostat[0] = new Thermostat(*tempSensors,0,"Office", 4000);
-//	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, officeSwitch));
-	thermostat[1] = new Thermostat(*tempSensors,1,"Kitchen", 4000);
+	thermostat[0] = new Thermostat(*tempSensors,0,"Bedroom", 4000);
+	thermostat[0]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[0]));
+	thermostat[1] = new Thermostat(*tempSensors,1,"Guestroom", 4000);
 	thermostat[1]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[1]));
 	thermostat[2] = new Thermostat(*tempSensors,2,"Hall", 4000);
-	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
-	thermostat[3] = new Thermostat(*tempSensors,3,"Bedroom", 4000);
+//	thermostat[2]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[2]));
+	thermostat[3] = new Thermostat(*tempSensors,3,"Outbuilding", 4000);
 	thermostat[3]->onStateChange(onStateChangeDelegate(&SwitchHttp::setState, httpSwitch[3]));
 
 	for(uint8_t i = 0; i< 7; i++)
