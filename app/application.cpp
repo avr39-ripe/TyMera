@@ -17,8 +17,11 @@ NtpClient ntpClient("pool.ntp.org", 300, onNtpReceive);
 
 //void STAConnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t channel);
 void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason);
+void STAConnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t channel);
 void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway);
+void STAReconnect();
 
+Timer reconnectTimer;
 //HeatControl Addition - START
 Timer SPITimer;
 Timer HSystemTimer;
@@ -152,6 +155,7 @@ void init()
 
 //	WifiEvents.onStationConnect(STAConnect);
 	WifiEvents.onStationDisconnect(STADisconnect);
+	WifiEvents.onStationConnect(STAConnect);
 	WifiEvents.onStationGotIP(STAGotIP);
 
 	startWebServer();
@@ -208,10 +212,18 @@ void counter_loop()
 //	wifi_station_dhcpc_set_maxtry(64); //SET DHCP MAXTRY
 //
 //}
+void STAReconnect()
+{
+	Serial.println("Try to reconnect...");
+
+	WifiStation.disconnect();
+	WifiStation.connect();
+}
 void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason)
 {
 	Serial.printf("DELEGATE DISCONNECT - SSID: %s, REASON: %d\n", ssid.c_str(), reason);
 
+	reconnectTimer.stop();
 	if (!WifiAccessPoint.isEnabled())
 	{
 		Serial.println("Starting OWN AP DELEGATE");
@@ -221,11 +233,19 @@ void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reas
 	}
 }
 
+void STAConnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t channel)
+{
+	Serial.printf("DELEGATE CONNECT - SSID: %s, CHANNEL: %d\n", ssid.c_str(), channel);
+
+	wifi_station_dhcpc_set_maxtry(128);
+	reconnectTimer.initializeMs(35000, STAReconnect).start();
+}
 void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway)
 {
 	Serial.printf("DELEGATE GOTIP - IP: %s, MASK: %s, GW: %s\n", ip.toString().c_str(),
 																mask.toString().c_str(),
 																gateway.toString().c_str());
+	reconnectTimer.stop();
 
 	if (WifiAccessPoint.isEnabled())
 	{
