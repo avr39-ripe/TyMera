@@ -99,9 +99,11 @@ void init()
 	ds.begin();
 
 	localTempSensors = new TempSensorsOW(ds, 4000);
-	localTempSensors->addSensor((String)"289D143E000000DB");
-	localTempSensors->addSensor((String)"28E31D3E000000A3");
-	localTempSensors->addSensor((String)"2897DD3D0000004D");
+	localTempSensors->addSensor((String)"289D143E000000DB"); // Tank BOTTOM 0/4 tempsensor
+	localTempSensors->addSensor((String)"28E31D3E000000A3"); // Tank TOP 4/4 tempsensor DO NOT CHANGE THIS
+	localTempSensors->addSensor((String)"2897DD3D0000004D"); // 3-way valve tempsensor DO NOT CHANGE THIS
+	localTempSensors->addSensor((String)"2897DD3D0000004E"); // Tank 2/4 tempsensor
+	localTempSensors->addSensor((String)"2897DD3D0000004F"); // Tank 3/4 tempsensor
 	localTempSensors->start();
 
 	tempSensors = new TempSensorsHttp(4000);
