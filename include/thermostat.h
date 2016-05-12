@@ -20,26 +20,26 @@ const uint8_t NO_PIN = 255;
 
 class HeatingSystem;
 
-class HWPump
-{
-public:
-	HWPump(uint8_t pump_pin);
-	void turn_on();
-	void turn_off();
-	void cycle(); // Run one cycle of HWPump turn ON, wait cycle_duration minutes then turn OFF and
-	void check(); // Check whether turn cycle pump
-	uint16_t _start_minutes; // minutes since 0:00 to start WHPump cycles
-	uint16_t _stop_minutes; // minutes since 0:00 to stop WHPump cycles
-	uint8_t _cycle_duration; // Duration of pump stay turning on in Minutes
-	uint8_t _cycle_interval; // Interval of turning HWPump On for a while in Minutes
-
-private:
-	void turn_on_delayed();
-	void turn_off_delayed();
-	uint8_t _pump_pin;
-	Timer _durationTimer;
-	Timer _intervalTimer;
-};
+//class HWPump
+//{
+//public:
+//	HWPump(uint8_t pump_pin);
+//	void turn_on();
+//	void turn_off();
+//	void cycle(); // Run one cycle of HWPump turn ON, wait cycle_duration minutes then turn OFF and
+//	void check(); // Check whether turn cycle pump
+//	uint16_t _start_minutes; // minutes since 0:00 to start WHPump cycles
+//	uint16_t _stop_minutes; // minutes since 0:00 to stop WHPump cycles
+//	uint8_t _cycle_duration; // Duration of pump stay turning on in Minutes
+//	uint8_t _cycle_interval; // Interval of turning HWPump On for a while in Minutes
+//
+//private:
+//	void turn_on_delayed();
+//	void turn_off_delayed();
+//	uint8_t _pump_pin;
+//	Timer _durationTimer;
+//	Timer _intervalTimer;
+//};
 
 class TerminalUnit
 {
@@ -107,7 +107,7 @@ public:
 	float _mode_curr_temp;
 	uint8_t _mode;
 	Pump* _pumps[4];
-	HWPump* _hwpump;
+//	HWPump* _hwpump;
 private:
 	void _caldron_turn_on_delayed();
 	void _temp_start();

@@ -12,13 +12,13 @@ struct ThermConfig
 	ThermConfig()
 	{
 		StaEnable = 1; //Enable WIFI Client
-		sensorUrl = "http://192.168.31.130/temperature.json?sensor=0";
-		sensor1Url = "http://192.168.31.131/temperature.json?sensor=0";
-		sensor2Url = "http://192.168.31.132/temperature.json?sensor=0";
-		sensor3Url = "http://192.168.31.133/temperature.json?sensor=0";
-		switchUrl = "http://192.168.31.134/set_state";
-		switch1Url = "http://192.168.31.135/set_state";
-		switch2Url = "http://192.168.31.136/set_state";
+		sensorUrl = "http://192.168.31.200/temperature.json?sensor=0";
+		sensor1Url = "http://192.168.31.201/temperature.json?sensor=0";
+		sensor2Url = "http://192.168.31.202/temperature.json?sensor=0";
+		sensor3Url = "http://192.168.31.203/temperature.json?sensor=0";
+		switchUrl = "http://192.168.31.204/set_state";
+		switch1Url = "http://192.168.31.205/set_state";
+		switch2Url = "http://192.168.31.206/set_state";
 //		sensorUrl = "http://10.2.113.114/state";
 
 		//HeatControl defaults
@@ -28,11 +28,11 @@ struct ThermConfig
 		pump_off_delay = 10; //seconds
 		caldron_on_delay = 10; //seconds
 		room_off_delay = 15; //seconds
-		start_minutes = 480; // minutes since 0:00 to start WHPump cycles
-		stop_minutes = 1380; // minutes since 0:00 to stop WHPump cycles
-		cycle_duration = 5; // Duration of pump stay turning on in minutes
-		cycle_interval = 60; // Interval of turning HWPump On for a while in minutes
-		time_zone = 2; // Time zone offset from GMT
+//		start_minutes = 480; // minutes since 0:00 to start WHPump cycles
+//		stop_minutes = 1380; // minutes since 0:00 to stop WHPump cycles
+//		cycle_duration = 5; // Duration of pump stay turning on in minutes
+//		cycle_interval = 60; // Interval of turning HWPump On for a while in minutes
+		time_zone = 3; // Time zone offset from GMT
 		twvalve_temp = 23;
 		twvalve_temp_delta = 0.5;
 		twvalve_step_time = 10;
@@ -58,10 +58,10 @@ struct ThermConfig
 	uint16_t pump_off_delay;
 	uint16_t caldron_on_delay;
 	uint16_t room_off_delay;
-	uint16_t start_minutes;
-	uint16_t stop_minutes;
-	uint8_t cycle_duration;
-	uint8_t cycle_interval;
+//	uint16_t start_minutes;
+//	uint16_t stop_minutes;
+//	uint8_t cycle_duration;
+//	uint8_t cycle_interval;
 	uint8_t time_zone;
 	float twvalve_temp;
 	float twvalve_temp_delta;
