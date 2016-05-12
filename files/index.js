@@ -17,6 +17,39 @@ $( document ).ready(function() {
 				tank_tempPanel.classList.add("panel-danger");
 			}
 			
+			document.getElementById('tank3_temp').innerHTML = data.tank3_temp + ' &deg;C';
+			var tank3_tempPanel = document.getElementById('tank3_temp-panel');
+			if (data.tank3_healthy) {
+				tank3_tempPanel.classList.remove("panel-danger");
+				tank3_tempPanel.classList.add("panel-default");
+			}
+			else {
+				tank3_tempPanel.classList.remove("panel-default");
+				tank3_tempPanel.classList.add("panel-danger");
+			}
+			
+			document.getElementById('tank2_temp').innerHTML = data.tank2_temp + ' &deg;C';
+			var tank2_tempPanel = document.getElementById('tank2_temp-panel');
+			if (data.tank2_healthy) {
+				tank2_tempPanel.classList.remove("panel-danger");
+				tank2_tempPanel.classList.add("panel-default");
+			}
+			else {
+				tank2_tempPanel.classList.remove("panel-default");
+				tank2_tempPanel.classList.add("panel-danger");
+			}
+			
+			document.getElementById('tank0_temp').innerHTML = data.tank0_temp + ' &deg;C';
+			var tank0_tempPanel = document.getElementById('tank0_temp-panel');
+			if (data.tank0_healthy) {
+				tank0_tempPanel.classList.remove("panel-danger");
+				tank0_tempPanel.classList.add("panel-default");
+			}
+			else {
+				tank0_tempPanel.classList.remove("panel-default");
+				tank0_tempPanel.classList.add("panel-danger");
+			}
+			
 			document.getElementById('valve_temp').innerHTML = data.valve_temp + ' &deg;C';
 			var valve_tempPanel = document.getElementById('valve_temp-panel');
 			if (data.valve_healthy) {
