@@ -12,13 +12,13 @@ struct ThermConfig
 	ThermConfig()
 	{
 		StaEnable = 1; //Enable WIFI Client
-		sensorUrl = "http://192.168.31.200/temperature.json?sensor=0";
-		sensor1Url = "http://192.168.31.201/temperature.json?sensor=0";
-		sensor2Url = "http://192.168.31.202/temperature.json?sensor=0";
-		sensor3Url = "http://192.168.31.203/temperature.json?sensor=0";
-		switchUrl = "http://192.168.31.204/set_state";
-		switch1Url = "http://192.168.31.205/set_state";
-		switch2Url = "http://192.168.31.206/set_state";
+		sensorUrl = "http://192.168.1.200/temperature.json?sensor=0";
+		sensor1Url = "http://192.168.1.201/temperature.json?sensor=0";
+		sensor2Url = "http://192.168.1.202/temperature.json?sensor=0";
+		sensor3Url = "http://192.168.1.203/temperature.json?sensor=0";
+		switchUrl = "http://192.168.1.204/set_state";
+		switch1Url = "http://192.168.1.205/set_state";
+		switch2Url = "http://192.168.1.206/set_state";
 //		sensorUrl = "http://10.2.113.114/state";
 
 		//HeatControl defaults
