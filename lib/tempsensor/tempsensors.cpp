@@ -222,7 +222,14 @@ void TempSensorsOW::_temp_read()
 			_data[id]->_statusFlag = 0; // current value of _temperature is GOOD, healthy
 			Serial.printf("ID: %d - ", id); Serial.println(_data[id]->_temperature);
 		}
-	_temp_readTimer.stop();
+		else
+		{
+			Serial.printf("no DS18B20 device present at id: %d!\n", id);
+			_data[id]->_statusFlag = (TempSensorStatus::DISCONNECTED | TempSensorStatus::INVALID);
+			continue;
+		}
+	}
+	_temp_readTimer.stop(); //stop temp_readTimer after ALL sensors data red, not after first successful!!!
 }
 
 //TempSensorsHttp
