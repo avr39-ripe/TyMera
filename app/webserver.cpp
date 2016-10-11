@@ -164,6 +164,12 @@ void onAJAXGetState(HttpRequest &request, HttpResponse &response)
 	json["tank_healthy"] = localTempSensors->isValid(1);
 	json["valve_temp"] = localTempSensors->getTemp(2); //show valve temp here
 	json["valve_healthy"] = localTempSensors->isValid(2);
+	json["tank0_temp"] = localTempSensors->getTemp(0); //tank 0/4
+	json["tank0_healthy"] = localTempSensors->isValid(0);
+	json["tank2_temp"] = localTempSensors->getTemp(3); //tank 2/4
+	json["tank2_healthy"] = localTempSensors->isValid(3);
+	json["tank3_temp"] = localTempSensors->getTemp(4); //tank 3/4
+	json["tank3_healthy"] = localTempSensors->isValid(4);
 	json["mode"] = HSystem._mode;
 	String date_time_str = SystemClock.getSystemTimeString();
 	json["date_time"] = date_time_str;

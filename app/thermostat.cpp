@@ -9,44 +9,44 @@
 
 //HWPump implementation
 
-HWPump::HWPump(uint8_t pump_pin)
-{
-	this->_pump_pin = pump_pin;
-}
-
-void HWPump::cycle()
-{
-	DateTime _now = SystemClock.now(eTZ_Local);
-	uint16_t _now_minutes = _now.Hour * 60 + _now.Minute;
-
-	if ((_now_minutes >= ActiveConfig.start_minutes) && (_now_minutes <= ActiveConfig.stop_minutes))
-	{
-		Serial.print(_now.toFullDateTimeString()); Serial.println(" Turn HWPump ON! ");
-		turn_on();
-		//Here we have delayed turn off, not immediately!!!
-		turn_off();
-	}
-	else
-	{
-		Serial.print(_now.toFullDateTimeString()); Serial.println(" Sleep time for HWPump! ");
-	}
-	this->_intervalTimer.initializeMs((ActiveConfig.cycle_interval) * 60000, TimerDelegate(&HWPump::cycle, this)).start(false); //cycle_duration in minute so multiple by 60 * 1000 to be in ms.
-}
-
-void HWPump::turn_on()
-{
-	setState(out_reg, _pump_pin, true);
-}
-
-void HWPump::turn_off()
-{
-		this->_durationTimer.initializeMs(ActiveConfig.cycle_duration * 60000, TimerDelegate(&HWPump::turn_off_delayed, this)).start(false); //cycle_interval in minute so multiple by 60 * 1000 to be in ms.
-}
-
-void HWPump::turn_off_delayed()
-{
-	setState(out_reg, _pump_pin, false);
-}
+//HWPump::HWPump(uint8_t pump_pin)
+//{
+//	this->_pump_pin = pump_pin;
+//}
+//
+//void HWPump::cycle()
+//{
+//	DateTime _now = SystemClock.now(eTZ_Local);
+//	uint16_t _now_minutes = _now.Hour * 60 + _now.Minute;
+//
+//	if ((_now_minutes >= ActiveConfig.start_minutes) && (_now_minutes <= ActiveConfig.stop_minutes))
+//	{
+//		Serial.print(_now.toFullDateTimeString()); Serial.println(" Turn HWPump ON! ");
+//		turn_on();
+//		//Here we have delayed turn off, not immediately!!!
+//		turn_off();
+//	}
+//	else
+//	{
+//		Serial.print(_now.toFullDateTimeString()); Serial.println(" Sleep time for HWPump! ");
+//	}
+//	this->_intervalTimer.initializeMs((ActiveConfig.cycle_interval) * 60000, TimerDelegate(&HWPump::cycle, this)).start(false); //cycle_duration in minute so multiple by 60 * 1000 to be in ms.
+//}
+//
+//void HWPump::turn_on()
+//{
+//	setState(out_reg, _pump_pin, true);
+//}
+//
+//void HWPump::turn_off()
+//{
+//		this->_durationTimer.initializeMs(ActiveConfig.cycle_duration * 60000, TimerDelegate(&HWPump::turn_off_delayed, this)).start(false); //cycle_interval in minute so multiple by 60 * 1000 to be in ms.
+//}
+//
+//void HWPump::turn_off_delayed()
+//{
+//	setState(out_reg, _pump_pin, false);
+//}
 
 //TerminalUnit implementation
 TerminalUnit::TerminalUnit(uint8_t circuit_pin, uint8_t pump_id, HeatingSystem* heating_system)

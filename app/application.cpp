@@ -37,7 +37,7 @@ MCP outputchip(1, mcp23s17_cs);            // Instantiate an object called "outp
 void onNtpReceive(NtpClient& client, time_t timestamp) {
 	SystemClock.setTime(timestamp, eTZ_UTC); //System timezone is LOCAL so to set it from UTC we specify TZ
 	DSRTC.set(timestamp); //DSRTC timezone is UTC so we need TZ-correct DSRTC.get()
-	Serial.printf("Time synchronized: %s\n", SystemClock.getSystemTimeString().c_str());
+//	Serial.printf("Time synchronized: %s\n", SystemClock.getSystemTimeString().c_str());
 }
 
 //void onOfficeStateChange(bool state)
@@ -99,11 +99,11 @@ void init()
 	ds.begin();
 
 	localTempSensors = new TempSensorsOW(ds, 4000);
-	localTempSensors->addSensor((String)"289D143E000000DB"); // Tank BOTTOM 0/4 tempsensor
+	localTempSensors->addSensor((String)"285CF43D00000021"); // Tank BOTTOM 0/4 tempsensor
 	localTempSensors->addSensor((String)"28E31D3E000000A3"); // Tank TOP 4/4 tempsensor DO NOT CHANGE THIS
 	localTempSensors->addSensor((String)"2897DD3D0000004D"); // 3-way valve tempsensor DO NOT CHANGE THIS
-	localTempSensors->addSensor((String)"2897DD3D0000004E"); // Tank 2/4 tempsensor
-	localTempSensors->addSensor((String)"2897DD3D0000004F"); // Tank 3/4 tempsensor
+	localTempSensors->addSensor((String)"28FF1231011601C3"); // Tank 2/4 tempsensor
+	localTempSensors->addSensor((String)"28FF4C320116017C"); // Tank 3/4 tempsensor
 	localTempSensors->start();
 
 	tempSensors = new TempSensorsHttp(4000);
@@ -174,7 +174,7 @@ void init()
 	//	inputchip.inputInvert(0x0000); // Use word-write mode to invert the inputs so that logic 0 is read as HIGH
 		outputchip.pinMode(0x0000);    // Use word-write mode to Set all of the pins on outputchip to be outputs
 
-		Serial.println("---===MCP23S17 VERSION===---");
+//		Serial.println("---===MCP23S17 VERSION===---");
 	#endif
 
 	#ifndef MCP23S17
@@ -216,19 +216,19 @@ void counter_loop()
 //}
 void STAReconnect()
 {
-	Serial.println("Try to reconnect...");
+//	Serial.println("Try to reconnect...");
 
 	WifiStation.disconnect();
 	WifiStation.connect();
 }
 void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reason)
 {
-	Serial.printf("DELEGATE DISCONNECT - SSID: %s, REASON: %d\n", ssid.c_str(), reason);
+	Serial.printf("DISCNT - SSID: %s, REASON: %d\n", ssid.c_str(), reason);
 
 	reconnectTimer.stop();
 	if (!WifiAccessPoint.isEnabled())
 	{
-		Serial.println("Starting OWN AP DELEGATE");
+//		Serial.println("Starting OWN AP DELEGATE");
 		WifiStation.disconnect();
 		WifiAccessPoint.enable(true);
 		WifiStation.connect();
@@ -237,14 +237,14 @@ void STADisconnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t reas
 
 void STAConnect(String ssid, uint8_t ssid_len, uint8_t bssid[6], uint8_t channel)
 {
-	Serial.printf("DELEGATE CONNECT - SSID: %s, CHANNEL: %d\n", ssid.c_str(), channel);
+	Serial.printf("CNT - SSID: %s, CHANNEL: %d\n", ssid.c_str(), channel);
 
 	wifi_station_dhcpc_set_maxtry(128);
 	reconnectTimer.initializeMs(35000, STAReconnect).start();
 }
 void STAGotIP(IPAddress ip, IPAddress mask, IPAddress gateway)
 {
-	Serial.printf("DELEGATE GOTIP - IP: %s, MASK: %s, GW: %s\n", ip.toString().c_str(),
+	Serial.printf("GOTIP - IP: %s, MASK: %s, GW: %s\n", ip.toString().c_str(),
 																mask.toString().c_str(),
 																gateway.toString().c_str());
 	reconnectTimer.stop();
